@@ -1,0 +1,112 @@
+<!-- start page title -->
+<div class="row ">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="page-title"> <i class="mdi mdi-view-dashboard title_icon"></i>
+                    API - Dashboard
+                </h4>
+            </div> <!-- end card body-->
+        </div> <!-- end card -->
+    </div><!-- end col-->
+</div>
+<!-- end page title -->
+
+<div class="row ">
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card widget-flat" id="customer" style="on">
+                            <div class="card-body">
+                                <div class="float-right">
+                                </div>
+                                <h5 class="text-muted font-weight-normal mt-0" title="Number of Student"> <i
+                                        class="mdi mdi-plus title_icon"></i>
+                                    Add New Application
+                                </h5>
+                                {{> application}}
+                            </div> <!-- end card-body-->
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+
+                    <div class="col-lg-8">
+                        <div class="card widget-flat" id="customer" style="on">
+                            <div class="card-body">
+                                <div class="float-right">
+                                </div>
+                                <h3 class="text-muted font-weight-normal mt-0" title="Number of Student"> <i
+                                        class="mdi mdi-application text-info title_icon"></i>
+                                    My Applications
+                                </h3>
+                                <div class="app_content" style="font-size: medium;">
+                                </div>
+                            </div> <!-- end card-body-->
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+                </div> <!-- end row -->
+
+            </div>
+        </div><!-- end col-->
+    </div>
+
+
+
+    <script>
+        // Function to generate a random token
+        function generateToken() {
+            const token = generateRandomToken();
+            $('.ajaxForm').on('submit', (e) => {
+                e.preventDefault();
+            });
+            document.getElementById("token").value = token;
+        }
+        function generateSecret() {
+            $('.ajaxForm').on('submit', (e) => {
+                e.preventDefault();
+            });
+            const token = generateRandomToken();
+            document.getElementById("app_secret").value = token;
+        }
+
+        // Function to send the token to the server for encryption
+        function encryptToken() {
+            const token = document.getElementById("token").value;
+
+            // Send an AJAX request to the server
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/encrypt", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    document.getElementById("encrypted-token").textContent = response.encryptedToken;
+                    document.getElementById("decrypted-token").textContent = "";
+                }
+            };
+            xhr.send(JSON.stringify({ token: token }));
+        }
+
+        // Function to generate a random token
+        function generateRandomToken() {
+            const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let token = "";
+            for (let i = 0; i < 42; i++) {
+                token += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return token;
+        }
+        function showAllApplications() {
+            $.ajax({
+                url: '/applications/list',
+                success: function (response) {
+                    $('.app_content').html(response);
+                    initDataTable('basic-datatable');
+                }
+            });
+        }
+        $(document).ready(() => {
+            showAllApplications();
+        })
+    </script>

@@ -1,0 +1,84 @@
+<form method="POST" class="d-block ajaxForm" action="/menus/edit/{{menu.id}}">
+    <div class="form-row">
+        {{!-- <input type="hidden" name="school_id" value=""> --}}
+        <div class="form-group col-md-12 row">
+            <div class="form-group col-md-6">
+                <label for="display_name">display name</label>
+                <input type="text" value="{{menu.display_name}}" class="form-control" placeholder="Menu name"
+                    id="display_name" name="display_name" required>
+                <small id="name_help" class="form-text text-muted">provide display name</small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="parentId">
+                    parent
+                </label>
+                <select name="parentId" id="parentId" class="form-control select2" data-toggle="select2" required>
+
+                    {{#ifEquals menu.parent 0}}
+                    <option value="0" selected>self
+                    </option>
+                    {{else}}
+                    <option value="0">self
+                    </option>
+                    {{/ifEquals}}
+                    {{#each parents}}
+                    {{#ifEquals id ../menu.parent}}
+                    <option value="{{id}}" selected>
+                        {{display_name}}
+                    </option>
+                    {{else}}
+                    <option value="{{id}}">
+                        {{display_name}}
+                    </option>
+                    {{/ifEquals}}
+                    {{/each}}
+                </select>
+                <small id="" class="form-text text-muted">
+                    provide parent menu to assign the menu
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group col-md-12 row">
+            <div class="form-group col-md-6">
+                <label for="route_name">route name</label>
+                <input type="text" value="{{menu.route_name}}" class="form-control" id="route_name" placeholder="/route"
+                    name="route_name" required>
+                <small id="route_name_help" class="form-text text-muted">provide route name start with "/" </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="icon">icon</label>
+                <input type="text" value="{{menu.icon}}" class="form-control" id="icon" placeholder="mdi mdi-account"
+                    name="icon" required>
+                <small id="icon_help" class="form-text text-muted">provide icon (mdi) </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="sort_order">sort order</label>
+                <input type="number" value="{{menu.sort_order}}" class="form-control" id="sort_order"
+                    placeholder="0" name="sort_order">
+                <small id="sort_order_help" class="form-text text-muted">provide sort hirachy order </small>
+            </div>
+        </div>
+        <div class="form-group mt-2 col-md-6">
+            <button class="btn btn-block btn-info" type="submit">
+                {{trs 'update'}} {{trs 'menu'}}
+            </button>
+        </div>
+        <div class="form-group mt-2 col-md-6">
+            <button class="btn btn-block btn-secondary" type="reset" data-dismiss="modal">
+                cancel
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        initSelect2(['#parentId']);
+    });
+    $(".ajaxForm").validate({}); // Jquery form validation initialization
+    $(".ajaxForm").submit(function (e) {
+        var form = $(this);
+        ajaxSubmit(e, form, 'POST', showAllMenus);
+    });
+</script>

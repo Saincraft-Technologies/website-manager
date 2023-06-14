@@ -1,0 +1,43 @@
+<table id="basic-datatable" class="table table-striped td-responsive nowrap" width="100%">
+    <thead>
+        <tr style="background-color: #313a46; color: #ababab;">
+            {{#each headers}}
+            <th>{{head}}</th>
+            {{/each}}
+
+            <th>options</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each users}}
+        <tr>
+            <td>{{name}}
+            </td>
+            <td>{{gender}}
+            </td>
+            <td>{{setHomeDate birthdate}}
+            </td>
+            <td>{{status}}
+            </td>
+
+            <td>
+                <div class="dropdown text-center">
+                    <button type="button"
+                        class="btn btn-sm btn-icon btn-rounded btn-outline-secondary dropdown-btn dropdown-toggle arrow-none card-drop"
+                        data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-vertical"></i></button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item"
+                            onclick="largeModal('/{{models}}/edit/{{id}}', 'Update {{model}}, mdi mdi-pencil');"><i
+                                class="mdi mdi-update text-info"></i> edit</a>
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item"
+                            onclick="confirmModal('/{{models}}/delete/{{id}}', showAllManages)"><i
+                                class="mdi mdi-delete text-danger"></i> delete</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="{{locale}}">
+
+<head>
+    <meta charset="utf-8" />
+    <title>RCMS API | login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="saincraft" name="author" />
+    <!-- App favicon -->
+    <link rel="icon" type="image/x-icon" href="{{{cdn 'public'}}}/icons/IconC@300x.png">
+    <!-- App css -->
+    <link href="{{{cdn 'public'}}}/css/icons.min.css" rel="stylesheet" type="text/css" />
+    {{#ifEquals theme 'dark'}}
+    <link href="{{{cdn 'public'}}}/css/app-dark.min.css" rel="stylesheet" type="text/css" />
+    {{else}}
+    <link href="{{{cdn 'public'}}}/css/app.min.css" rel="stylesheet" type="text/css" />
+    {{/ifEquals}}
+    <!--Notify for ajax-->
+    <link rel="stylesheet" href="{{{cdn 'public'}}}/css/toastr.min.css">
+
+</head>
+
+<body data-layout="detached">
+    {{{body}}}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            initSelect2(["#language-list"]);
+        });
+        function getLanguageList() {
+            $.ajax({
+                url: "/translate/language/auth/list",
+                success: function (response) {
+                    console.log(response);
+                    $('#language-list').html(response);
+                }
+            });
+        }
+        {{!-- getInLanguageList(); --}}
+        function changeLanguage() {
+            let code = $('#language-list').val();
+            $.ajax({
+                url: "/translate/language/change/" + code,
+                success: (data) => {
+                    if (data.status) {
+                        location.reload();
+                    }
+                }
+            });
+        }
+    </script>
+
+    {{> include_bottom}}
+    <!-- bundle -->
+
+    <script src="{{{cdn 'public'}}}/js/app.min.js"></script>
+
+    <!--Notify for ajax-->
+    <script src="{{{cdn 'public'}}}/js/toastr.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,136 @@
+<!-- Topbar Start -->
+<div class="navbar-custom topnav-navbar topnav-navbar-dark" style="z-index: 100;">
+    <div class="container-fluid">
+        <!-- LOGO -->
+        <a href="/" class="topnav-logo" style="min-width: unset;">
+            <span class="topnav-logo-lg">
+                <img src="{{{cdn 'public'}}}/icons/LogoC@300x.png" alt="" height="40">
+            </span>
+            <span class="topnav-logo-sm">
+                <img src="{{{cdn 'public'}}}/icons/IconC300x.png" alt="" height="40">
+            </span>
+        </a>
+
+        <ul class="list-unstyled topbar-right-menu float-right mb-0">
+
+
+
+
+            {{!-- profile naviagation --}}
+
+            <li class="dropdown notification-list mt-3 mr-3">
+                <input type="checkbox" value="{{viewManager.signups.theme}}" name="changeTheme" id="changeTheme"
+                    data-switch="dark" {{#ifEquals viewManager.signups.theme 'light' }}checked{{else}} {{/ifEquals}} />
+                <label for="changeTheme" onclick="changeTheme();" data-on-label="dark" data-off-label="light"></label>
+                <script>
+                    function changeTheme() {
+                        var value = $('#changeTheme').val();
+                        (value == 'dark') ?
+                            value = 'light' :
+                            value = 'dark';
+                        console.log(value);
+
+                        $.ajax({
+                            url: "/theme/toggle/" + value,
+                            success: function (response) {
+                                if (response.status) {
+                                    location.reload()
+                                } else {
+                                    toastr.err('error occured changin theme', value);
+                                }
+                            }
+                        });
+                    };</script>
+            </li>
+            <li class="dropdown notification-list">
+                <a class="nav-link dropdown-toggle arrow-none" data-toggle="dropdown" href="#" role="button"
+                    aria-haspopup="false" aria-expanded="false" onclick="getLanguageList()" title="change language">
+                    <i class="mdi mdi-currency-twd noti-icon"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-sm">
+
+                    <!-- item-->
+                    <div class="dropdown-item noti-title">
+                        <h5 class="m-0">
+                            Languages
+                        </h5>
+                    </div>
+
+                    <div id="language-list" style="min-height: 150px; width:100%; margin:0;">
+                    </div>
+                </div>
+            </li>
+
+
+            {{!-- profile naviagation --}}
+            <li class="dropdown notification-list">
+                <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" data-toggle="dropdown" href="#"
+                    role="button" aria-haspopup="false" aria-expanded="false">
+                    <span class="account-user-avatar">
+                        <div class="mt-0 rounded-circle js--image-preview" style="background-image: url({{cdn}}/uploads/images/users/{{{kaimage viewManager.name}}}_user_image_.png);
+                        width:38px;height:38px; background-color: #F5F5F5; top:-2px;">
+                        </div>
+                    </span>
+                    <span>
+                        <span class="account-user-name">{{viewManager.name}}</span>
+                        <span class="account-position">{{viewManager.role.role}}</span>
+
+                    </span>
+                </a>
+
+                <div
+                    class="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
+                    <!-- item-->
+                    <div class=" dropdown-header noti-title row">
+                        <h6 class="text-overflow m-0">
+                            'welcome!</h6><small
+                            style="word-wrap:break-word; font-size:xx-small;">{{viewManager.email}}</small>
+                    </div>
+
+                    <!-- item-->
+                    <a href="#" onclick="loadPage('{{viewManager.home}}/profile', 'id', 'Profile')"
+                        class="dropdown-item notify-item">
+                        <i class="mdi mdi-account-circle mr-1"></i>
+                        <span> 'My Account</span>
+                    </a>
+                    <!-- item-->
+                    <a href="#" onclick="loadPage('/settings','Settings')" class="dropdown-item notify-item">
+                        <i class="mdi mdi-account-edit mr-1"></i>
+                        <span> 'settings</span>
+                    </a>
+                    <!-- item-->
+                    <a href="mailto:support@saincrafttechnologies.com?Subject=Help%20On%20This" target="_blank"
+                        class="dropdown-item notify-item">
+                        <i class="mdi mdi-lifebuoy mr-1"></i>
+                        <span> 'Support</span>
+                    </a>
+
+                    <!-- item-->
+                    <a href="/auth/logout" class="dropdown-item notify-item">
+                        <i class="mdi mdi-logout mr-1"></i>
+                        <span>Logout</span>
+                    </a>
+
+                </div>
+            </li>
+        </ul>
+        <a class="button-menu-mobile disable-btn">
+            <div class="lines">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </a>
+        <div class="visit_website">
+            <h4 style="color: #fff; float: left; margin-top:1.5rem;">{{viewManager.owner}}</h4>
+            {{!-- <a href="/" target="" class="btn btn-outline-light ml-3">'Visit Website</a> --}}
+            <img class="hidden content-placeholder mt-2 ml-2" src="{{{cdn 'public'}}}/images/loader.gif" alt=""
+                height="35px;">
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+</script>

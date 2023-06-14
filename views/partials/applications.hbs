@@ -1,0 +1,70 @@
+<table id="basic-datatable" style="font-size: smaller;" class="table table-striped dt-responsive nowrap" width="100%">
+    <thead>
+        <tr>
+            {{#each headers}}
+            {{#ifEquals head 'dns'}}
+            {{else}}
+            {{#ifEquals head 'phone'}}
+            {{else}}
+            {{#ifEquals head 'email'}}
+            <th>contacts</th>
+            {{else}}
+            <th>{{head}}</th>
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/each}}
+            <th>options</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each websites}}
+        <tr>
+            <td>
+                <a href="{{dns}}" title="preview site" target="_blank">{{dns}}</a><br>
+                {{owner}}
+            </td>
+            <td>
+                <i class="mdi mdi-email"></i>: <a href="mailTo:{{email}}">{{email}}</a><br>
+                <i class="mdi mdi-phone"></i>: <a href="phoneTo:{{email}}">{{phone}}</a>
+            </td>
+            <td>
+                {{key}}
+            </td>
+            <td>
+                {{app_secret}}
+            </td>
+            <td>
+                {{code}}
+            </td>
+            <td>
+                {{ip_address}}
+            </td>
+            <td>
+                {{response_format}}
+            </td>
+            <td>
+                <div class="dropdown text-center">
+                    <button type="button"
+                        class="btn btn-sm btn-icon btn-rounded btn-outline-secondary dropdown-btn dropdown-toggle arrow-none card-drop"
+                        data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-vertical"></i></button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item"
+                            onclick="largeModal('/websites/logs/{{id}}', '{{dns}} logs', 'mdi mdi-cog text-warning')">
+                            log
+                        </a>
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item"
+                            onclick="confirmModal('websites/delete/{{id}}' )">
+                            delete
+                        </a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {{!--
+        <?php endforeach; ?> --}}
+        {{/each}}
+    </tbody>
+</table>

@@ -1,0 +1,165 @@
+<script src="{{{cdn 'public'}}}/js/init.js"></script>
+<script type="text/javascript">
+  var callBackFunction;
+  var id;
+  var callBackFunctionForGenericConfirmationModal;
+  function largeModal(url, header, icon) {
+    jQuery('#large-modal').modal('show', { backdrop: 'true' });
+    // SHOW AJAX RESPONSE ON REQUEST SUCCESS
+    $.ajax({
+      url: url,
+      success: function (response) {
+        jQuery('#large-modal .modal-body').html(response);
+        jQuery('#large-modal .modal-title').html('<i class="' + icon + '"></i> ' + header);
+      }
+    });
+  }
+  function largerModal(url, header, icon) {
+    jQuery('#larger-modal').modal('show', { backdrop: 'true' });
+    // SHOW AJAX RESPONSE ON REQUEST SUCCESS
+    $.ajax({
+      url: url,
+      success: function (response) {
+        jQuery('#larger-modal .modal-body').html(response);
+        jQuery('#larger-modal .modal-title').html('<i class="' + icon + '"></i> ' + header);
+      }
+    });
+  }
+
+
+  function mediumModal(url, header, icon) {
+    // LOADING THE AJAX MODAL
+    jQuery('#medium-modal').modal('show', { backdrop: 'true' });
+
+    // SHOW AJAX RESPONSE ON REQUEST SUCCESS
+    $.ajax({
+      url: url,
+      success: function (response) {
+        jQuery('#medium-modal .modal-body').html(response);
+        jQuery('#medium-modal .modal-title').html('<i class="' + icon + '"></i> ' + header);
+      }
+    });
+  }
+
+
+  function confirmModal(delete_url, param, data) {
+    jQuery('#alert-modal').modal('show', { backdrop: 'static' });
+    jQuery('#data_space').text(data);
+    callBackFunction = param;
+    document.getElementById('delete_form').setAttribute('action', delete_url);
+  }
+  function confirmModalId(delete_url, param, id) {
+    jQuery('#alert-modal').modal('show', { backdrop: 'static' });
+    callBackFunction = param;
+    id = id;
+    document.getElementById('delete_form').setAttribute('action', delete_url);
+  }
+
+  function genericConfirmModal(callBackFunction) {
+    jQuery('#genric-confirmation-modal').modal('show', { backdrop: 'static' });
+    callBackFunctionForGenericConfirmationModal = callBackFunction;
+  }
+
+  function callTheCallBackFunction() {
+    $('#genric-confirmation-modal').modal('hide');
+    callBackFunctionForGenericConfirmationModal();
+  }
+</script>
+
+
+
+<!-- medium modal content -->
+<div id="medium-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myMediumModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-md modal-medium">
+    <div class="modal-content modal_height">
+
+      <div class="modal-header d-print-none">
+        <h4 class="modal-title" id="myMediumModalLabel"></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--  Large Modal -->
+<div class="modal fade" id="large-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header d-print-none">
+        <h4 class="modal-title" id="myLargeModalLabel"></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--  Large Modal -->
+<div class="modal fade" id="larger-modal" tabindex="-1" style="" role="dialog" aria-labelledby="myLargerModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header d-print-none">
+        <h4 class="modal-title" id="myLargerModalLabel"></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Info Alert Modal -->
+<div id="alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body p-4">
+        <div class="text-center">
+          <i class="dripicons-information h1 text-info"></i>
+          <h4 class="mt-2">Warning!</h4>
+          <p class="mt-1">Are you sure you want to delete </p>
+          <p class="mt-1 text-danger" id="data_space" style="font-weight: 600;"></p>
+          <p class="mt-1">this action is ireversible?</p>
+          <form method="POST" class="ajaxDeleteForm" action="" id="delete_form">
+            <button type="button" class="btn btn-info my-2" data-dismiss="modal">cancel</button>
+            <button type="submit" class="btn btn-danger my-2" onclick="">continue</button>
+          </form>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Info Alert Modal THIS MODAL WAS USED BECAUSE OF SOME GENERIC ALERTS-->
+<div id="genric-confirmation-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body p-4">
+        <div class="text-center">
+          <i class="dripicons-information h1 text-info"></i>
+          <h4 class="mt-2">heads up!</h4>
+          <p class="mt-3">are you sure?</p>
+          <button type="button" class="btn btn-info my-2" data-dismiss="modal">cancel</button>
+          <button type="submit" class="btn btn-danger my-2" onclick="callTheCallBackFunction()">continue</button>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+  jQuery(".ajaxDeleteForm").submit(function (e) {
+    var form = $(this);
+    ajaxSubmit(e, form, "DELETE", callBackFunction, id);
+  });
+</script>

@@ -1,0 +1,98 @@
+{{relationQuery}}
+<table id="basic-datatable" class="table table-striped td-responsive nowrap" width="100%">
+    <thead>
+        <tr style="background-color: #313a46; color: #ababab;">
+            {{#each headers}}
+            <th>{{head}}</th>
+            {{!-- <th>route</th> --}}
+            {{/each}}
+            {{#each menus.0.roles}}
+            {{#ifEquals viewManager.role.role role}}
+            <th>{{role}}</th>
+            {{else}}
+            {{#ifEquals viewManager.role.role role}}
+            <th>{{role}}</th>
+            {{else}}
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/each}}
+
+            <th>options</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each menus}}
+        <tr>
+            <td>{{display_name}}
+            </td>
+            <td>{{route_name}}
+            </td>
+
+
+            <td>
+                {{#ifEquals parent 0}}
+                {{display_name}}
+                {{else}}
+
+                {{#each ../menus}}
+                {{#ifEquals ../parent id}}
+                {{display_name}}
+                {{/ifEquals}}
+                {{/each}}
+                {{/ifEquals}}
+            </td>
+            <td><i class="{{icon}}"></i>
+            </td>
+            <td>{{sort_order}}
+            </td>
+            <td>{{is_addon}}
+            </td>
+            <td>{{unique_identifier}}
+            </td>
+
+            {{#ifEquals ../role.role 'admin'}}
+            {{#each ../roles}}
+            {{#ifEquals 'superadmin' role}}
+            {{else}}
+            <td>
+                <input type="checkbox" value="{{id}}" id="{{../parent}}{{../display_name}}{{id}}" data-switch="info"
+                    onchange="togglePermission(this, '{{../id}}', '{{id}}');" {{#each ../roles}}{{#ifEquals ../id id}}
+                    checked{{/ifEquals}} {{/each}} {{#ifEquals ../parent 1}} disabled {{/ifEquals}} {{#ifEquals ../id
+                    1}} disabled {{/ifEquals}}>
+                <label for="{{../parent}}{{../display_name}}{{id}}" data-on-label="Yes" data-off-label="No"></label>
+            </td>
+            {{/ifEquals}}
+            {{/each}}
+            {{else}}
+            {{#each ../roles}}
+            <!-- superadmin options-->
+            <td>
+                <input type="checkbox" value="{{id}}" id="{{../parent}}{{../display_name}}{{id}}" data-switch="info"
+                    onchange="togglePermission(this, '{{../id}}', '{{id}}');" {{#each ../roles}}{{#ifEquals ../id id}}
+                    checked{{/ifEquals}} {{/each}}>
+                <label for="{{../parent}}{{../display_name}}{{id}}" data-on-label="Yes" data-off-label="No"></label>
+            </td>
+            <!-- superadmin options end-->
+            {{/each}}
+            {{/ifEquals}}
+
+
+            <td>
+                <div class="dropdown text-center">
+                    <button type="button"
+                        class="btn btn-sm btn-icon btn-rounded btn-outline-secondary dropdown-btn dropdown-toggle arrow-none card-drop"
+                        data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-vertical"></i></button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item"
+                            onclick="largeModal('/{{models}}/edit/{{id}}', 'Update {{model}}');">edit</a>
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item"
+                            onclick="confirmModal('/{{models}}/delete/{{id}}', showAllMenus)">delete</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

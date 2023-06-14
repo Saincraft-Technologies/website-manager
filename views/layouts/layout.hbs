@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{> include_top}}
+    <title>{{viewManager.owner}} | Manager</title>
+</head>
+
+
+
+<body data-layout="detached">
+    <!-- HEADER -->
+    {{>header}}
+    <div class="container-fluid">
+        <div class="wrapper">
+            <!-- BEGIN CONTENT -->
+            <!-- SIDEBAR -->
+            {{> sidebar}}
+
+            <!-- PAGE CONTAINER-->
+            <div class="content-page">
+                <div class="content content-main">
+                    <div class="loadings hidden"></div>
+                    <!-- BEGIN PlACE PAGE CONTENT HERE -->
+                    <div class="content_holder">
+                        {{{body}}}
+                    </div>
+                    <!-- END PLACE PAGE CONTENT HERE -->
+                </div>
+                <!-- Footer -->
+                {{>footer}}
+            </div>
+            <!-- END CONTENT -->
+        </div>
+    </div>
+    <!-- all the js files -->
+    {{>include_bottom}}
+    {{> modals}}
+    {{> notify}}
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+<script src="{{{cdn 'public'}}}/js/select2.min.js"></script>
+<form method="POST" class="d-block ajaxForm" action="{{action}}">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="name">
+                name
+            </label>
+            <input type="text" placeholder="fullname" value="{{user.name}}" class="form-control" id="name" name="name"
+                required>
+            <small id="" class="form-text text-muted">
+                provide fullname
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="email">
+                email
+            </label>
+            <input type="email" placeholder="xyz@example.com" value="{{user.contacts.0.email}}" class="form-control"
+                id="email" name="email" required>
+            <small id="" class="form-text text-muted">
+                provide email
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="phone">
+                phone
+            </label>
+            <input type="text" class="form-control" value="{{user.contacts.0.phone}}" placeholder="phone number"
+                id="phone" name="phone" required>
+            <small id="" class="form-text text-muted">
+                provide phone number
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="gender">
+                gender
+            </label>
+            <select name="gender" id="gender" class="form-control select2" data-toggle="select2">
+                <option value="" disabled selected>
+                    select gender
+                </option>
+                {{#ifEquals user.gender 'MALE'}}
+                <option value="MALE" selected>
+                    Male
+                </option>
+                {{else}}
+                <option value="MALE">
+                    Male
+                </option>
+                {{/ifEquals}}
+                {{#ifEquals user.gender 'FEMALE'}}
+                <option value="FEMALE" selected>
+                    Female
+                </option>
+                {{else}}
+                <option value="FEMALE">
+                    Female
+                </option>
+                {{/ifEquals}}
+            </select>
+            <small id="" class="form-text text-muted">
+                provide gender
+            </small>
+        </div>
+        <div class="form-group mt-2 col-md-6">
+            <button class="btn btn-block btn-info" type="submit">
+                {{#if user}}
+                update user
+                {{else}}
+                create user
+                {{/if}}
+            </button>
+        </div>
+        <div class="form-group mt-2 col-md-6">
+            <button class="btn btn-block btn-secondary" type="reset" data-dismiss="modal">
+                cancel
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#gender').select2({
+            dropdownParent: $('#large-modal')
+        }); $('#role').select2({
+            dropdownParent: $('#large-modal')
+        });
+        addAddress();
+        addPhone();
+    });
+
+    $(".ajaxForm").validate({}); // Jquery form validation initialization
+    $(".ajaxForm").submit(function (e) {
+        var form = $(this);
+        ajaxSubmit(e, form, 'POST', showAllManages);
+    });
+</script>

@@ -1,0 +1,100 @@
+<script src="{{{cdn 'public'}}}/js/app.min.js"></script>
+
+<!-- third party js -->
+<script src="{{{cdn 'public'}}}/js/vendor/jquery.dataTables.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/dataTables.bootstrap4.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/dataTables.responsive.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/dataTables.buttons.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/responsive.bootstrap4.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/buttons.bootstrap4.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/buttons.html5.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/buttons.flash.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/buttons.print.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/dataTables.keyTable.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/dataTables.select.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/Chart.bundle.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/jquery-jvectormap-world-mill-en.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/jquery-ui.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/fullcalendar.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/vendor/summernote-bs4.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/select2.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/select2.full.min.js"></script>
+<!-- third party js ends -->
+
+<!--Notify for ajax-->
+<script src="{{{cdn 'public'}}}/js/toastr.min.js"></script>
+
+<script src="{{{cdn 'public'}}}/js/jquery.validate.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/additional-methods.min.js"></script>
+<!-- demo app -->
+{{!--
+<script src="{{{cdn 'public'}}}/js/pages/demo.dashboard.js"></script> --}}
+<!-- end demo js-->
+
+<!--Custom JS-->
+<script src="{{{cdn 'public'}}}/js/jspdf.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/jspdf.plugin.autotable.min.js"></script>
+<script src="{{{cdn 'public'}}}/js/custom.js"></script>
+<script src="{{{cdn 'public'}}}/js/content-placeholder.js"></script>
+<script src="{{{cdn 'public'}}}/js/addon.js"></script>
+<script src="{{{cdn 'public'}}}/js/ajax_form_submission.js"></script>
+<script src="{{{cdn 'public'}}}/js/init.js"></script>
+<script src="{{{cdn 'public'}}}/js/barcode/barcode.js"></script>
+<script src="{{{cdn 'public'}}}/js/barcode/barcode.min.js"></script>
+<script>
+    $(document).ready(() => {
+
+        (localStorage.getItem('displayName')) ? localStorage.getItem('displayName') : localStorage.setItem('displayName', 'Home');
+        (localStorage.getItem('mainDisplayName')) ? localStorage.getItem('mainDisplayName') : localStorage.setItem('mainDisplayName', 'Home');
+        (localStorage.getItem('prevMainDisplayName')) ? null : localStorage.setItem('prevMainDisplayName', '');
+        let currentRoute = location.pathname;
+        (localStorage.getItem('prevRoute')) ? null : localStorage.setItem('prevRoute', currentRoute);
+        (localStorage.getItem('currentRoute')) ? null : localStorage.setItem('currentRoute', currentRoute);
+        //loadPage('/dashboard', localStorage.getItem('displayName'), localStorage.getItem('displayName'), localStorage.getItem('mainDisplayName'));
+    });
+
+    null
+    var oldroute = "/dashboard";
+    var oldrouteIn = "Dashboard";
+    function loadPage(route, name, title, item) {
+        //location.pathname = route;
+        let currentRoute2 = location.pathname;
+        localStorage.setItem('prevRoute', currentRoute2);
+        localStorage.setItem('currentRoute', route);
+        if (typeof name == 'string' && parseInt(name) == NaN) {
+            $.ajax({
+                url: route,
+                success: (data) => {
+                    $('.content_holder').html('');
+                    $('.content_holder').html(data);
+                    $('#mainTitle').html('RCMS |' + title);
+                }
+            })
+        } else {
+            $.ajax({
+                url: route,
+                success: (data) => {
+                    $('.content_holder').html('');
+                    $('.content_holder').html(data);
+                    $('#mainTitle').html('RCMS |' + name);
+                }
+            })
+        }
+
+        $('#' + localStorage.getItem('mainDisplayName') + '-main-a').removeClass('active');
+        $('#' + localStorage.getItem('mainDisplayName') + '-main-ul').removeClass('in');
+        $('#' + localStorage.getItem('displayName') + '-small-li').removeClass('active');
+        $('#' + localStorage.getItem('displayName') + '-small-a').removeClass('active');
+
+        (localStorage.getItem('mainDisplayName') == item) ? null : localStorage.setItem('prevMainDisplayName', localStorage.getItem('mainDisplayName'));
+        localStorage.setItem('prevDisplayName', localStorage.getItem('displayName'));
+        localStorage.setItem('displayName', name);
+        localStorage.setItem('mainDisplayName', item);
+        $('#' + localStorage.getItem('mainDisplayName') + '-main-a').addClass('active');
+        $('#' + localStorage.getItem('mainDisplayName') + '-main-ul').addClass('in');
+        $('#' + localStorage.getItem('displayName') + '-small-li').addClass('active');
+        $('#' + localStorage.getItem('displayName') + '-small-a').addClass('active');
+
+    }
+</script>

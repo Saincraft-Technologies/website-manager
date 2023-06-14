@@ -1,0 +1,116 @@
+<div class="auth-fluid">
+    <!--Auth fluid left content -->
+    <div class="auth-fluid-form-box">
+        <div class="align-items-center d-flex h-100">
+            <div class="card-body">
+                <!-- Logo -->
+                <div class="text-center text-lg-left mb-3">
+                    <a href="/">
+                        <span><img src="{{{cdn 'public'}}}/icons/LogoC@300x.png" alt="" height=" 75"></span>
+                    </a>
+                </div>
+                <h4 class="mt-0">Sign in</h4>
+                <p class="text-muted mb-4">Enter your email</p>
+                {{#if messages.error}}
+                <div class="alert alert-danger mt-3">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    {{#ifEquals messages.error 'User dont exist!'}}
+                    <strong>Oh snap!</strong> {{messages.error}} <a href="#" disabled>sign up</a>
+                    {{else}}
+                    <strong>Oh snap!</strong> {{messages.error}}
+                    {{/ifEquals}}
+                </div>
+                {{/if}}
+                <!-- form -->
+                <form action="/auth/signin" method="post" id="loginForm">
+                    <div class="form-group">
+                        <label for="emailaddress">email</label>
+                        <input class="form-control" type="email" name="email" id="emailaddress" required=""
+                            placeholder="enter your email">
+                    </div>
+                    <div class="form-group">
+                        <a href="javascript: void(0);" class="text-muted float-right"
+                            onclick="forgotPass();"><small>forgot password</small></a>
+                        <label for="password">password</label>
+                        <input class="form-control" type="password" name="password" required="" id="password"
+                            placeholder=" enter your password">
+                        <span class="text-danger" id="error_message"></span>
+                    </div>
+                    <div class="form-group mb-0 text-center">
+                        <button class="btn btn-primary btn-block" type="submit"><i class="mdi mdi-login"></i>
+                            Sign in </button>
+                        <a href="/auth/signup" class="text-muted float-right"><small> register?
+                            </small></a>
+                    </div>
+                </form>
+
+                <form action="/forgot" method="post" id="forgotForm" style="display: none;">
+                    <div class="form-group">
+                        <a href="/signin" class="text-muted float-right"><small>back to login</small></a>
+                        <label for="forgotEmail">email</label>
+                        <input class="form-control" type="email" name="email" required="" id="forgotEmail"
+                            placeholder="enter your email">
+                    </div>
+                    <div class="form-group mb-0 text-center">
+                        <button class="btn btn-primary btn-block" type="submit"><i class="mdi mdi-login"></i>sent
+                            password reset link</button>
+                    </div>
+
+                </form>
+                <!-- end form-->
+            </div> <!-- end .card-body -->
+        </div> <!-- end .align-items-center.d-flex.h-100-->
+    </div>
+    <!-- end auth-fluid-form-box-->
+
+    <!-- Auth fluid right content -->
+    <div class="row" style="width:100%; margin-top:20%;">
+        {{!-- <h3>WECLOME!</h3> --}}
+        <div class="col-md-2"></div>
+        <div style="width:100%;" class="col-md-8">
+
+            {{!-- <marquee behavior="alternate" style="color: antiquewhite;" direction="left">
+                <h2>This is <span>Sain</span><span style="color:green">craft</span> storekeeper app</h2>
+                <h5>Please login to continue!</h5>
+
+                <h5>If you dont have an account please contact your administrator!</h5>
+                <h5>If you dont have an administrator please contact us on <a
+                        href="mailto:info@saincrafttechnologies.com">info@saincrafttechnologies.com!</a> </h5>
+
+            </marquee> --}}
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <!-- end Auth fluid right content -->
+</div>
+
+<script src="{{{cdn 'public'}}}/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        initSelect2(["#language-list"]);
+    });
+    function getLanguageList() {
+        $.ajax({
+            url: "/translate/language/auth/list",
+            success: function (response) {
+                console.log(response);
+                $('#language-list').html(response);
+            }
+        });
+    }
+    {{!-- getLanguageList(); --}}
+    function changeLanguage() {
+        let code = $('#language-list').val();
+        $.ajax({
+            url: "/translate/language/change/" + code,
+            success: (data) => {
+                if (data.status) {
+                    location.reload();
+                }
+            }
+        });
+    }
+</script>
+<!-- end auth-fluid-->
+
+<!-- App js -->
