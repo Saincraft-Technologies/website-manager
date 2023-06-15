@@ -84,6 +84,6 @@ http.createServer(app)
     .listen(port, async () => {
         let Q = new Query();
         await Q.syncTable();
-        // await executiveQueries();// this is commented!
+        await executiveQueries();// this is commented!
         console.log(`server running in ${_env} mode on port ${port}`);
     });
