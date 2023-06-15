@@ -30,7 +30,7 @@ module.exports = {
                 } else {
                     let auth = JSON.parse(JSON.stringify(await models['websites'].findAll({ where: { key: process.env.D_API_KEY } })));
 
-                    console.log('...password verified!', await passVerify);
+                    console.log('...password verified!', await passVerify, auth, process.env.D_API_KEY);
                     if (passVerify) {
                         let userData = {
                             id: _user.id,

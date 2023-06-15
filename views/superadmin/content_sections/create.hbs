@@ -1,0 +1,79 @@
+<script src="{{{cdn 'public'}}}/js/select2.min.js"></script>
+<form method="POST" class="d-block ajaxForm" action="{{action}}">
+    <div class="form-row">
+
+        <div class="form-group col-md-6">
+            <label for="content">
+                content
+            </label>
+            <select class="form-control select2" name="contentId" id="contentId" required>
+                <option value="" selected>select content</option>
+                {{#each contents}}
+                <option value="{{id}}">{{content}}</option>
+                {{/each}}
+            </select>
+            <small id="" class="form-text text-muted">
+                provide content
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="section">
+                section
+            </label>
+            <select class="form-control select2" name="sectionId" id="sectionId" required>
+                <option value="" selected>select section</option>
+                {{#each sections}}
+                <option value="{{id}}">{{section}}</option>
+                {{/each}}
+            </select>
+            <small id="" class="form-text text-muted">
+                provide section
+            </small>
+        </div>
+
+        <div class="form-group col-md-12">
+            <label for="paragraph">
+                content section paragraphs
+            </label>
+            <textarea name="paragraph" id="paragraph" placeholder="paragraphs" class="form-control" cols="30"
+                rows="10">{{section_content.paragraph}}</textarea>
+
+            <small id="" class="form-text text-muted">
+                provide paragraph
+            </small>
+        </div>
+        <div class="form-group row col-md-12">
+
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-info" type="submit">
+                    {{#if user}}
+                    update section content
+                    {{else}}
+                    create section content
+                    {{/if}}
+                </button>
+            </div>
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-secondary" type="reset" data-dismiss="modal">
+                    cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#contentId').select2({
+            dropdownParent: $('#large-modal')
+        }); $('#sectionId').select2({
+            dropdownParent: $('#large-modal')
+        });
+    });
+
+    $(".ajaxForm").validate({}); // Jquery form validation initialization
+    $(".ajaxForm").submit(function (e) {
+        var form = $(this);
+        ajaxSubmit(e, form, 'POST', showAllManages);
+    });
+</script>

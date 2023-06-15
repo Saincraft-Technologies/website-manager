@@ -41,7 +41,9 @@ try {
       );
       break;
     default:
-      connection.destroy();
+      if (connection) {
+        connection.destroy();
+      }
       break;
   }
 

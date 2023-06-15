@@ -8,6 +8,10 @@ pages = sequelize.define('pages', {
         primaryKey: true,
         unique: true
     },
+    page_name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     title: {
         type: DataTypes.STRING,
         allowNull: false,

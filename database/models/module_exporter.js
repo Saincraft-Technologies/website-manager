@@ -31,9 +31,10 @@ const pages = require("./system_properties/pages");
 const contents = require("./contents/contents");
 const articles = require("./articles/articles");
 const article_sections = require("./articles/article_sections");
-
+const content_sections = require("./sections/content_sections");
 
 module.exports = {
+    content_sections,
     sections,
     websites,
     messages,

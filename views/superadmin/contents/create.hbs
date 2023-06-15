@@ -3,23 +3,36 @@
     <div class="form-row">
         <div class="form-group row col-md-12">
             <div class="form-group col-md-6">
-                <label for="page_name">
-                    page name
+                <label for="pageId">
+                    page
                 </label>
-                <input type="text" placeholder="page name" value="{{page.name}}" class="form-control" id="page_name"
-                    name="page_name" required>
+                <select name="pageId" id="pageId" class="form-control select2" data-toggle="select2" required>
+                    <option value="0">select page
+                    </option>
+                    {{#each pages}}
+                    {{#ifEquals id ../content.pageId}}
+                    <option value="{{id}}" selected>
+                        {{page_name}}
+                    </option>
+                    {{else}}
+                    <option value="{{id}}">
+                        {{page_name}}
+                    </option>
+                    {{/ifEquals}}
+                    {{/each}}
+                </select>
                 <small id="" class="form-text text-muted">
-                    provide page name should be small letter & no space. Since it is used to create routes.
+                    provide content binding page
                 </small>
             </div>
             <div class="form-group col-md-6">
-                <label for="title">
-                    title
+                <label for="content">
+                    content name
                 </label>
-                <input type="text" placeholder="title" value="{{page.title}}" class="form-control" id="title"
-                    name="title" required>
+                <input type="text" placeholder="content name" value="{{content.content}}" class="form-control"
+                    id="content" name="content" required>
                 <small id="" class="form-text text-muted">
-                    provide page title
+                    provide content
                 </small>
             </div>
             <div class="form-group col-md-6">
@@ -27,19 +40,9 @@
                     caption
                 </label>
                 <textarea placeholder="caption .." class="form-control" id="caption" name="caption"
-                    required>{{#if page}}{{page.caption}}{{else}}{{/if}}</textarea>
+                    required>{{#if content}}{{content.caption}}{{else}}{{/if}}</textarea>
                 <small id="" class="form-text text-muted">
                     provide caption
-                </small>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="description">
-                    description
-                </label>
-                <textarea placeholder="description .." class="form-control" id="description"
-                    name="description">{{#if page}}{{page.description}}{{else}}{{/if}}</textarea>
-                <small id="" class="form-text text-muted">
-                    provide description
                 </small>
             </div>
         </div>
@@ -47,10 +50,10 @@
 
             <div class="form-group mt-2 col-md-6">
                 <button class="btn btn-block btn-info" type="submit">
-                    {{#if page}}
-                    update page
+                    {{#if content}}
+                    update content
                     {{else}}
-                    create page
+                    create content
                     {{/if}}
                 </button>
             </div>
@@ -64,6 +67,9 @@
 
 <script>
     $(document).ready(function () {
+        $('#pageId').select2({
+            dropdownParent: $('#large-modal')
+        });
     });
 
     $(".ajaxForm").validate({}); // Jquery form validation initialization

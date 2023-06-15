@@ -9,8 +9,8 @@ const Poster = require('./poster');
 // const requestor = require('../controllers/requestor');
 
 
-router.get('/:model/list', /*apiLimit,*/ hasToken, async (req, res) => {
-    console.log('am here');
+router.get('/:model/list', /*apiLimit,*/ async (req, res) => {
+    console.log('am here list ===>>>', req.params.model);
     try {
         const getter = await new Getter(req);
         const response = await getter.get_v2();

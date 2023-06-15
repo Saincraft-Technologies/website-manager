@@ -24,6 +24,10 @@ const pluralize = (noun) => {
         console.log('length', Noun.length);
         return Noun.slice(0, noun.length - 1) + 'eves';
     }
+    if (Noun.endsWith(`ss`)) {
+        console.log('length', Noun.length);
+        return Noun + 'es';
+    }
     return noun + 's';
 };
 const singularize = (plural) => {

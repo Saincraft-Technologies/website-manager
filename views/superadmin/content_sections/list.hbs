@@ -12,14 +12,13 @@
         </tr>
     </thead>
     <tbody>
-        {{#each pages}}
+        {{#each content_sections}}
         <tr>
-            <td><strong>Name:</strong> {{page_name}}<br><strong>Route:</strong> <a href="#">/{{page_name}}.html</a>
-                <br><strong>Descriptions:</strong> {{description}}
+            <td>{{paragraph}}
             </td>
-            <td>{{title}}
+            <td>{{content.content}}<br>{{content.caption}}
             </td>
-            <td>{{caption}}</td>
+            <td>{{section.section}}<br>{{section.caption}}
             <td>
                 <div class="dropdown text-center">
                     <button type="button"

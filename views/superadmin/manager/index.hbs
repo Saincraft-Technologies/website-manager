@@ -45,8 +45,8 @@
     function togglePermission(checkboxId, menuId, roleId) {
         $.ajax({
             type: 'POST',
-            url: '/menus/visibility',
-            data: { menuId: menuId.toString(), menuId: menuId.toString(), roleId: roleId.toString() },
+            url: 'backend/{{viewManager.role.role}}/{{models}}/visibility',
+            data: {menuId: menuId.toString(), roleId: roleId.toString() },
             success: function (response) {
                 if (response.status) {
                     toastr.success(response.notification);

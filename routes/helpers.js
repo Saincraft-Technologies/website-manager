@@ -38,6 +38,16 @@ module.exports = {
                 break;
 
             default:
+                console.log('model dont include _');
+                let modQs = JSON.parse(JSON.stringify(await models[model].findAll()));
+                console.log('mod qs key ===>', modQs[0])
+                for (const key in modQs[0]) {
+                    if (key.includes('Id')) {
+                        console.log('mod qs key ===>', pluralize(key.split('Id')[0]))
+                        db_query_includes.push({ model: models[pluralize(key.split('Id')[0])] });
+                    }
+                }
+                console.log('mode qs db query ++++====>>>', db_query_includes)
                 break;
         }
 

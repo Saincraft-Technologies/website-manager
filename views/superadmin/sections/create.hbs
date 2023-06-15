@@ -1,0 +1,58 @@
+<script src="{{{cdn 'public'}}}/js/init.js"></script>
+<form method="POST" class="d-block ajaxForm" action="{{action}}" enctype="multipart/form-data">
+    <div class="form-row">
+        <div class="form-group row col-md-12">
+
+            <div class="form-group col-md-6">
+                <label for="section">
+                    section name
+                </label>
+                <input type="text" placeholder="section name" value="{{section.section}}" class="form-control"
+                    id="section" name="section" required>
+                <small id="" class="form-text text-muted">
+                    provide section
+                </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="caption">
+                    caption
+                </label>
+                <textarea placeholder="caption .." class="form-control" id="caption" name="caption"
+                    required>{{#if section}}{{section.caption}}{{else}}{{/if}}</textarea>
+                <small id="" class="form-text text-muted">
+                    provide caption
+                </small>
+            </div>
+        </div>
+        <div class="form-group row col-md-12">
+
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-info" type="submit">
+                    {{#if section}}
+                    update section
+                    {{else}}
+                    create section
+                    {{/if}}
+                </button>
+            </div>
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-secondary" type="reset" data-dismiss="modal">
+                    cancel
+                </button>
+            </div>
+        </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#pageId').select2({
+            dropdownParent: $('#large-modal')
+        });
+    });
+
+    $(".ajaxForm").validate({}); // Jquery form validation initialization
+    $(".ajaxForm").submit(function (e) {
+        var form = $(this);
+        ajaxSubmit(e, form, 'POST', showAllManages);
+    });
+</script>

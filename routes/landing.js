@@ -39,17 +39,17 @@ router.get('/:role/:model/index', isLoggedIn, async (req, res) => {
         if (req.query['rel0']) {
             let creator = `/${req.params.role}/${req.params.model}/create`;
             console.log('before running');
-            res.render(`${req.params.role}/manager/index`, { layout: false, listRoute: listRoute, menuIcon: menuIcon.icon, model: model, _model: req.params.model, models: models, relationQuery: relationQuery, creator: creator })
+            res.render(`${req.params.role}/manager/index`, { layout: false, viewManager: req.session.passport.user, listRoute: listRoute, menuIcon: menuIcon.icon, model: model, _model: req.params.model, models: models, relationQuery: relationQuery, creator: creator })
         } else {
             console.log(relationQuery.split('=')[0]);
             console.log('relation queries', model);
             let creator = `/${req.params.role}/${req.params.model}/create`
-            res.render(`${req.params.role}/manager/index`, { layout: false, listRoute: listRoute, menuIcon: menuIcon.icon, model: model, _model: req.params.model, models: models, relationQuery: relationQuery, creator: creator })
+            res.render(`${req.params.role}/manager/index`, { layout: false, viewManager: req.session.passport.user, listRoute: listRoute, menuIcon: menuIcon.icon, model: model, _model: req.params.model, models: models, relationQuery: relationQuery, creator: creator })
         }
     } else {
         console.log('am here');
         let creator = `/${req.params.role}/${req.params.model}/create`
-        res.render(`${req.params.role}/manager/index`, { layout: false, listRoute: listRoute, menuIcon: menuIcon.icon, model: model, _model: req.params.model, models: models, relationQuery: relationQuery, creator: creator })
+        res.render(`${req.params.role}/manager/index`, { layout: false, viewManager: req.session.passport.user, listRoute: listRoute, menuIcon: menuIcon.icon, model: model, _model: req.params.model, models: models, relationQuery: relationQuery, creator: creator })
     }
 });
 
@@ -73,7 +73,8 @@ router.get('/:role/:model/list', isLoggedIn, async (req, res) => {
         }
     });
 
-    var param = [{ layout: false }];
+    var param = [{ layout: false, route: `${req.session.passport.user.role.role}/${req.params.model}`, model: singularize(req.params.model) }];
+
     switch (req.params.model) {
         case 'menus':
             var normal = await relation_query(req, models);
@@ -139,7 +140,7 @@ router.get('/:role/:model/list', isLoggedIn, async (req, res) => {
         console.log(...param);
     }
 });
-router.get('/:role/:model/create', isLoggedIn, user().none(), async (req, res) => {
+router.get('/:role/:model/create', isLoggedIn, async (req, res) => {
     const control = new Controllers(req);
     let params = [{ layout: false }];
     if (isEmpty(req.query)) {
@@ -154,6 +155,18 @@ router.get('/:role/:model/create', isLoggedIn, user().none(), async (req, res) =
             console.log(...params);
             res.render(`${req.params.role}/${req.params.model}/create`, ...params);
         } else {
+            switch (req.params.model) {
+                case 'menus':
+                    params[0]['parents'] = await control.find('menus', { where: { parent: 0 } });
+                    console.log('my menu parents ===>>>>', params);
+                    break;
+                case 'contents':
+                    params[0]['pages'] = await control.find('pages', {});
+                    console.log('my menu parents ===>>>>', params);
+                    break;
+                default:
+                    break;
+            }
             params[0]['action'] = `/backend/${req.params.role}/${req.params.model}/create`;
             console.log(...params);
             res.render(`${req.params.role}/${req.params.model}/create`, ...params);
@@ -199,6 +212,112 @@ router.post('/:role/:model/create', isLoggedIn, user().any(), async (req, res) =
     // console.log(await data);
     // res.render('dashboard', { layout: false, applications: data })
 });
+
+router.get('/:role/:model/edit/:id', isLoggedIn, async (req, res) => {
+    const control = new Controllers(req);
+    let params = [{ layout: false }];
+    if (isEmpty(req.query)) {
+        if (req.params.model.includes('_')) {
+            let normal = await create_builder(req);
+            for (const norm of normal) {
+                console.log('norm =====>>>>>', norm.model);
+                params[0][norm] = await (await control.find(`${norm}`, {}));
+                console.log('norm =====>>>>>', ...params);
+            }
+            params[0]['action'] = `/backend/${req.params.role}/${req.params.model}/edit/` + req.params.id;
+            console.log(...params);
+            res.render(`${req.params.role}/${req.params.model}/create` + req.params.id, ...params);
+        } else {
+            switch (req.params.model) {
+                case 'menus':
+                    params[0]['parents'] = await control.find('menus', { where: { parent: 0 } });
+                    console.log('my menu parents ===>>>>', params);
+                    // if (role_menu.length <= 0) {
+                    //     await control.edit/('role_menus', { menuId: req.body.menuId, roleId: req.body.roleId })
+                    // } else {
+                    //     await control.delete('role_menus', { where: { menuId: req.body.menuId, roleId: req.body.roleId }, paranoid: false })
+                    // }
+                    break;
+                case 'contents':
+                    params[0]['pages'] = await control.find('pages', {});
+                    break;
+
+                default:
+                    break;
+            }
+            params[0]['action'] = `/backend/${req.params.role}/${req.params.model}/edit/` + req.params.id;
+            params[0][singularize(req.params.model)] = await control.single(req.params.model, { where: { id: req.params.id } })
+            console.log(...params);
+            res.render(`${req.params.role}/${req.params.model}/create`, ...params);
+        }
+
+    } else {
+        params[0]['action'] = `/backend/${req.params.role}/${req.params.model}/edit/` + req.params.id;
+        res.render(`${req.params.role}/${req.params.model}/create/`, { layout: false });
+    }
+
+});
+
+router.post('/:role/:model/edit/:id', isLoggedIn, user().any(), async (req, res) => {
+
+    const control = new Controllers(req);
+    console.log('requested body', req.body);
+    try {
+        switch (req.params.model) {
+            case 'applications':
+                // let data = req.body;
+                data['userId'] = req.session.passport.user.id;
+                data['code'] = Math.round(Math.random() * 1000000);
+                // console.log(data);
+                // let newData = await control.create('applications', req.body);
+                // console.log('==========>>>>>>>', newData)
+                res.status(200).json({ status: true, notification: 'successfully added!', data: await newData });
+                break;
+            case 'users':
+
+                break;
+            default:
+                if (req.params.model.includes('_')) {
+
+                    return res.status(200).json({ status: true, notification: 'successfully added ' + (req.params.model.replace('_', ' ')), data: await control.update(req.params.model, req.body, { where: { id: req.params.id } }) });
+                    break;
+                }
+                res.status(200).json({ status: true, notification: 'successfully added ' + req.params.model, data: await control.update(req.params.model, req.body, { where: { id: req.params.id } }) });
+                break;
+        }
+    } catch (error) {
+        res.status(500).json({ status: false, notification: 'error' + error.message })
+    }
+    // let data = await (await control.create('applications', req.body));
+    // console.log(await data);
+    // res.render('dashboard', { layout: false, applications: data })
+});
+
+router.get('/:role/:model/upload/:id', isLoggedIn, async (req, res) => {
+    res.render(`${req.params.role}/${req.params.model}/upload`, { layout: false, action: `/backend/${req.params.role}/${req.params.model}/upload/${req.params.id}` });
+});
+
+router.post('/:role/:model/upload/:id', isLoggedIn, user().single('file'), async (req, res) => {
+    const control = new Controllers(req);
+    try {
+        switch (req) {
+            case 'files':
+                console.log('fields::', req.files);
+                res.status(200).json({ status: true, notification: 'successfully uploaded files!' });
+                break;
+
+            default:
+                let file = await control.create('uploads', req.file);
+                console.log(file);
+                await control.update(req.params.model, { uploadId: file.id }, { where: { id: req.params.id } });
+                res.status(200).json({ status: true, notification: 'successfully uploaded file!' });
+                break;
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ status: false, notification: 'failed to upload file! ' + error.message });
+    }
+});
 router.get('/applications/list', isLoggedIn, async (req, res) => {
     const control = new Controllers(req);
 
@@ -207,5 +326,27 @@ router.get('/applications/list', isLoggedIn, async (req, res) => {
     res.render('partials/applications', { layout: false, applications: data.applications })
 });
 
+router.post('/:role/:model/visibility', isLoggedIn, async (req, res) => {
+    try {
+        const control = await new Controllers(req);
+        switch (req.params.model) {
+            case 'menus':
+                let role_menu = await control.find('role_menus', { where: { menuId: req.body.menuId, roleId: req.body.roleId } });
+                console.log('my role menu ===>>>>', role_menu);
+                if (role_menu.length <= 0) {
+                    await control.create('role_menus', { menuId: req.body.menuId, roleId: req.body.roleId })
+                } else {
+                    await control.delete('role_menus', { where: { menuId: req.body.menuId, roleId: req.body.roleId }, paranoid: false })
+                }
+                break;
+
+            default:
+                break;
+        }
+        res.status(200).json({ status: true, notification: 'successfully update menu!' })
+    } catch (err) {
+        res.status(500).json({ status: false, notification: 'failed to update menu: ' + err.message })
+    }
+});
 
 module.exports = router;
