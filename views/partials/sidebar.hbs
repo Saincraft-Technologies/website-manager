@@ -23,26 +23,13 @@
                 {{#each ../sub_menu}}
 
                 {{#ifEquals parent ../id}}
-                {{!-- {{#ifEquals route_name '/home'}}
                 <li class="side-nav-item _item" id="{{ display_name}}-small-li">
-                    <a onclick="loadPage('/home','{{ display_name}}', '{{ display_name}}', '{{ ../display_name}}')"
-                        aria-expanded="false" id="{{ display_name}}-small-a">
-                        <i class="{{icon}}"></i>
-                        <span>
-                            {{ display_name}}
-                        </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                </li>
-                {{else}} --}}
-                <li class="side-nav-item _item" id="{{ display_name}}-small-li">
-                    <a onclick="loadPage('/backend/{{../../viewManager.role.role}}{{route_name}}','{{ display_name}}', '{{ display_name}}', '{{ ../display_name}}')"
+                    <a onclick="loadPage('/backend/{{../../viewManager.role.role}}{{route_name}}','{{display_name}}', '{{ display_name}}', '{{ ../display_name}}')"
                         aria-expanded="false">
                         <i class="{{icon}}"></i>
-                        <span>{{ display_name}}</span>
+                        <span>{{display_name}}</span>
                     </a>
                 </li>
-                {{!-- {{/ifEquals}} --}}
                 {{/ifEquals}}
                 {{/each}}
             </ul>
@@ -50,17 +37,18 @@
         </li>
         {{/each}}
         <!-- another loop-->
+
     </ul>
-    <div class="clearfix">
-        {{!--
+    <div class="clearfix mt-10">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-6">
-                    © <a href="/footer_link" target="_blank">
-                        footer text
+                <div class="col-md-12">
+
+                    © <a href="/" target="_blank">
+                        Saincraft Technologies
                     </a>
                 </div>
             </div>
-        </div> --}}
+        </div>
     </div>
 </div>

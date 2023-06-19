@@ -1,0 +1,117 @@
+<div class="auth-fluid">
+    <!--Auth fluid left content -->
+    <div class="auth-fluid-form-box">
+        <div class="align-items-center d-flex h-100">
+            <div class="card-body">
+                <!-- Logo -->
+                <div class="text-center text-lg-left mb-3">
+                    <a href="/">
+                        <span><img src="{{{cdn 'public'}}}/icons/LogoC@300x.png" alt="" height=" 75"></span>
+                    </a>
+                </div>
+                <h4 class="mt-0">Signup</h4>
+                <p class="text-muted mb-4">Enter your email</p>
+
+                <!-- form -->
+                <form action="/auth/signup" method="post">
+                    <div class="form-row" id="userForm">
+                        <div class="form-group  col-md-12">
+                            <label for="fullname">Fullname</label>
+                            <input class="form-control" type="text" name="name" id="fullname" required
+                                placeholder="enter your fullname">
+                        </div>
+                        <div class="form-group  col-md-12">
+                            <label for="gender">gender</label>
+                            <select class="form-control" type="gender" name="gender" required="" id="gender"
+                                placeholder=" enter your password">
+                                <option value="MALE">Male</option>
+                                <option value="FEMALE">Female</option>
+                            </select>
+                            <span class="text-danger" id="error_message">
+                                {{#if messages.error}}
+                                <div class="alert alert-danger mt-3">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    {{#ifEquals messages.error 'User dont exist!'}}
+                                    <strong>Oh snap!</strong> {{messages.error}} <a href="#" disabled>sign up</a>
+                                    {{else}}
+                                    <strong>Oh snap!</strong> {{messages.error}}
+                                    {{/ifEquals}}
+                                </div>
+                                {{/if}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-row collapse" id="contactForm">
+                        <div class="form-group col-md-12">
+                            <label for="emailaddress">email</label>
+                            <input class="form-control" type="email" name="email" id="emailaddress" required=""
+                                placeholder="enter your email">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="phone">phone</label>
+                            <input class="form-control" type="text" name="phone" required="" id="phone"
+                                placeholder=" enter your phone">
+                            <span class="text-danger" id="error_message"></span>
+                        </div>
+                    </div>
+                    <div class="form-row collapse" id="passwordForm">
+                        <div class="form-group col-md-12">
+                            <label for="password">password</label>
+                            <input class="form-control" type="password" name="password" id="password" required=""
+                                placeholder="enter your password">
+                        </div>
+                        <div class="form-group  col-md-12">
+                            <label for="password">repeat password</label>
+                            <input class="form-control" type="password" name="r-password" id="r-password"
+                                placeholder=" repeat your password">
+                            <span class="text-danger" id="error_message"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group text-center row col-md-12">
+                        <div class="col-md-6">
+                            <button class="btn btn-sm btn-info btn-block back collapse" onclick="back()"
+                                type="button"><i class="mdi mdi-arrow-left"></i> back</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-sm btn-primary btn-block next" onclick="next()" type="button">next <i
+                                    class="mdi mdi-arrow-right"></i></button>
+                            <button class="btn btn-sm btn-success btn-block finish collapse" type="submit">finish
+                                <i class="mdi mdi-login"></i></button>
+                        </div>
+
+                    </div>
+
+                </form>
+                <!-- end form-->
+            </div> <!-- end .card-body -->
+        </div> <!-- end .align-items-center.d-flex.h-100-->
+    </div>
+    <!-- end auth-fluid-form-box-->
+
+    <!-- Auth fluid right content -->
+    <div class="row" style="width:100%; margin-top:20%;">
+        {{!-- <h3>WECLOME!</h3> --}}
+        <div class="col-md-2"></div>
+        <div style="width:100%;" class="col-md-8">
+
+            {{!-- <marquee behavior="alternate" style="color: antiquewhite;" direction="left">
+                <h2>This is <span>Sain</span><span style="color:green">craft</span> storekeeper app</h2>
+                <h5>Please login to continue!</h5>
+
+                <h5>If you dont have an account please contact your administrator!</h5>
+                <h5>If you dont have an administrator please contact us on <a
+                        href="mailto:info@saincrafttechnologies.com">info@saincrafttechnologies.com!</a> </h5>
+
+            </marquee> --}}
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <!-- end Auth fluid right content -->
+</div>
+
+<script src="{{{cdn 'public'}}}/js/jquery-3.3.1.min.js"></script>
+
+<!-- end auth-fluid-->
+
+<!-- App js -->

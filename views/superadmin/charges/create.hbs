@@ -1,0 +1,103 @@
+<script src="{{{cdn 'public'}}}/js/select2.min.js"></script>
+<form method="POST" class="d-block ajaxForm" action="{{action}}">
+    <div class="form-row">
+        <div class="form-group row col-md-12">
+            <div class="form-group col-md-6">
+                <label for="charge">
+                    charge name
+                </label>
+                <input type="text" placeholder="charge name" value="{{charge.charge}}" class="form-control" id="charge"
+                    name="charge" required>
+                <small id="" class="form-text text-muted">
+                    provide charge name
+                </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="amount">
+                    amount
+                </label>
+                <input type="number" placeholder="amount" value="{{charge.amount}}" class="form-control" id="amount"
+                    name="amount" required>
+                <small id="" class="form-text text-muted">
+                    provide charge amount
+                </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="duration">
+                    duration / occurance
+                </label>
+                <select placeholder="duration .." class="form-control" id="duration" name="duration" required>
+                    {{#ifEquals 'use' charge.duration}}
+                    <option value="use" selected>Per-Use</option>
+                    {{else}}
+                    <option value="use">Per-Use</option>
+                    {{/ifEquals}}
+                    {{#ifEquals 'day' charge.duration}}
+                    <option value="day" selected>Day</option>
+                    {{else}}
+                    <option value="day">Day</option>
+                    {{/ifEquals}}
+                    {{#ifEquals 'month' charge.duration}}
+                    <option value="month" selected>Month</option>
+                    {{else}}
+                    <option value="month">Month</option>
+                    {{/ifEquals}}
+                    {{#ifEquals 'year' charge.duration}}
+                    <option value="year" selected>Year</option>
+                    {{else}}
+                    <option value="year">Year</option>
+                    {{/ifEquals}}
+                    {{#ifEquals 'daily' charge.duration}}
+                    <option value="daily" selected>Daily</option>
+                    {{else}}
+                    <option value="daily">Daily</option>
+                    {{/ifEquals}}
+                    {{#ifEquals 'monthly' charge.duration}}
+                    <option value="monthly" selected>Monthly</option>
+                    {{else}}
+                    <option value="monthly">Monthly</option>
+                    {{/ifEquals}}
+                    {{#ifEquals 'annualy' charge.duration}}
+                    <option value="annualy" selected>Annualy</option>
+                    {{else}}
+                    <option value="annualy">Annualy</option>
+                    {{/ifEquals}}
+
+                </select>
+                <small id="" class="form-text text-muted">
+                    provide charge duration or occurance
+                </small>
+            </div>
+        </div>
+        <div class="form-group row col-md-12">
+
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-info" type="submit">
+                    {{#if charge}}
+                    update charge
+                    {{else}}
+                    create charge
+                    {{/if}}
+                </button>
+            </div>
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-secondary" type="reset" data-dismiss="modal">
+                    cancel
+                </button>
+            </div>
+        </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#duration').select2({
+            dropdownParent: $('#large-modal')
+        });
+    });
+
+    $(".ajaxForm").validate({}); // Jquery form validation initialization
+    $(".ajaxForm").submit(function (e) {
+        var form = $(this);
+        ajaxSubmit(e, form, 'POST', showAllManages);
+    });
+</script>

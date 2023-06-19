@@ -4,9 +4,9 @@ const { passwordHashVerify } = require('../controllers/controls/service');
 const models = require('../database/models/module_exporter');
 const rateLimit = require('express-rate-limit');
 
-// const session = require('express-session');
-// const SessionStore = require('session-file-store')(session);
-// this.use(flash());
+let date = new Date();
+console.log('date string ====>>>>', date.toISOString().split('T')[0]);
+let session = models['sessions']
 module.exports = {
     authenticateUser: async function (req, email, password, done) {
         // 
@@ -83,7 +83,7 @@ module.exports = {
     },
     hasToken: async (req, res, next) => {
         try {
-
+            console.log(req.headers.authorization)
             let auth = JSON.parse(JSON.stringify(await models['websites'].findAndCountAll({ where: { key: req.headers.authorization.split(' ')[1] } })));
 
             console.log('auth', auth);
@@ -159,6 +159,13 @@ module.exports = {
         } catch (err) {
             console.log(err);
             return res.redirect('/auth/signin');
+        }
+    },
+    hasRoles: async (rolesArray, req) => {
+        if (!rolesArray.length <= 0) {
+            return (rolesArray.includes(req.session.passport.user.role.role)) ? true : false;
+        } else {
+            return false;
         }
     }
 } 

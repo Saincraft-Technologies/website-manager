@@ -3,13 +3,21 @@ const router = express.Router();
 const models = require('../database/models/module_exporter');
 const { Op } = require('../database/mysql');
 const Controllers = require('../controllers/controls/control');
-const { isLoggedIn, hasToken } = require('../passport/passport');
+const { isLoggedIn, hasToken, hasRoles } = require('../passport/passport');
 const { user } = require('../multipart/multerConfig');
 const { menus, normal_query, create_builder, relation_query } = require('./helpers');
 const { singularize, pluralize, isEmpty } = require('../controllers/controls/service');
+const fs = require('fs');
+
 router.get('/', isLoggedIn, async (req, res) => {
-    console.log("Passport ===>>>", req.session.passport);
-    res.render('index', { route: `backend/${req.session.passport.user.role.role}/dashboard`, name: 'Dashboard', title: 'Dashboard', item: req.session.passport.user.role.role, viewManager: req.session.passport.user, menus: (await menus(models)).menu_main, sub_menu: (await menus(models)).sub_menu });
+    const acceptedRoles = ['superadmin', 'admin', 'manager', 'member'];
+    const allowed = await hasRoles(acceptedRoles, req)
+    if (allowed) {
+        console.log("Allowed ===>>>", allowed);
+        res.render('index', { route: `backend/${req.session.passport.user.role.role}/dashboard`, name: 'Dashboard', title: 'Dashboard', item: req.session.passport.user.role.role, viewManager: req.session.passport.user, menus: (await menus(models)).menu_main, sub_menu: (await menus(models)).sub_menu });
+    } else {
+        console.log('allowed ====>>>', allowed);
+    };
 });
 
 router.get('/:role/dashboard', isLoggedIn, async (req, res) => {
@@ -64,9 +72,15 @@ router.get('/:role/:model/list', isLoggedIn, async (req, res) => {
     list.map((item, i) => {
         if (i == 0) {
             for (const header in item) {
-                if (header != 'deletedAt' && header != 'createdAt' && header != 'updatedAt' && header != 'id') {
+                if (header != 'deletedAt' && header != 'createdAt' && header != 'id') {
                     if (!header.endsWith('Id')) {
-                        listHeaders.push({ head: (header.includes('_')) ? header.replace('_', ' ') : header });
+                        if (header.endsWith('At')) {
+                            listHeaders.push({ head: 'date' });
+                        } else {
+                            listHeaders.push({ head: (header.includes('_')) ? header.replace('_', ' ') : header });
+                        }
+                    } else {
+                        listHeaders.push({ head: header.split('Id')[0] });
                     }
                 }
             }
@@ -78,9 +92,7 @@ router.get('/:role/:model/list', isLoggedIn, async (req, res) => {
     switch (req.params.model) {
         case 'menus':
             var normal = await relation_query(req, models);
-
             break;
-
         default:
             var normal = await normal_query(req, models);
             break;
@@ -164,6 +176,20 @@ router.get('/:role/:model/create', isLoggedIn, async (req, res) => {
                     params[0]['pages'] = await control.find('pages', {});
                     console.log('my menu parents ===>>>>', params);
                     break;
+                case 'members':
+                    params[0]['teams'] = await control.find('teams', {});
+                    console.log('my team parents ===>>>>', params);
+                    break;
+                case 'usages':
+                    params[0]['websites'] = await control.find('websites', {});
+                    console.log('my team parents ===>>>>', params);
+                    break;
+                case 'bills':
+                    params[0]['websites'] = await control.find('websites', {});
+                    params[0]['charges'] = await control.find('charges', {});
+                    params[0]['usages'] = await control.find('usages', {});
+                    console.log('my team parents ===>>>>', params);
+                    break;
                 default:
                     break;
             }
@@ -206,7 +232,8 @@ router.post('/:role/:model/create', isLoggedIn, user().any(), async (req, res) =
                 break;
         }
     } catch (error) {
-        res.status(500).json({ status: false, notification: 'error' + error.message })
+        console.log(error);
+        return res.status(500).json({ status: false, notification: 'error' + error.message })
     }
     // let data = await (await control.create('applications', req.body));
     // console.log(await data);
@@ -224,22 +251,23 @@ router.get('/:role/:model/edit/:id', isLoggedIn, async (req, res) => {
                 params[0][norm] = await (await control.find(`${norm}`, {}));
                 console.log('norm =====>>>>>', ...params);
             }
+            params[0][singularize(req.params.model)] = await (await control.single(`${req.params.model}`, { where: { id: req.params.id } }))
             params[0]['action'] = `/backend/${req.params.role}/${req.params.model}/edit/` + req.params.id;
             console.log(...params);
-            res.render(`${req.params.role}/${req.params.model}/create` + req.params.id, ...params);
+            res.render(`${req.params.role}/${req.params.model}/create`, ...params);
         } else {
             switch (req.params.model) {
                 case 'menus':
                     params[0]['parents'] = await control.find('menus', { where: { parent: 0 } });
                     console.log('my menu parents ===>>>>', params);
-                    // if (role_menu.length <= 0) {
-                    //     await control.edit/('role_menus', { menuId: req.body.menuId, roleId: req.body.roleId })
-                    // } else {
-                    //     await control.delete('role_menus', { where: { menuId: req.body.menuId, roleId: req.body.roleId }, paranoid: false })
-                    // }
                     break;
                 case 'contents':
                     params[0]['pages'] = await control.find('pages', {});
+                    break;
+
+                case 'members':
+                    /** teams where website id  ====> */
+                    params[0]['teams'] = await control.find('teams', {});
                     break;
 
                 default:
@@ -271,7 +299,7 @@ router.post('/:role/:model/edit/:id', isLoggedIn, user().any(), async (req, res)
                 // console.log(data);
                 // let newData = await control.create('applications', req.body);
                 // console.log('==========>>>>>>>', newData)
-                res.status(200).json({ status: true, notification: 'successfully added!', data: await newData });
+                res.status(200).json({ status: true, notification: 'successfully updated!', data: await newData });
                 break;
             case 'users':
 
@@ -279,10 +307,10 @@ router.post('/:role/:model/edit/:id', isLoggedIn, user().any(), async (req, res)
             default:
                 if (req.params.model.includes('_')) {
 
-                    return res.status(200).json({ status: true, notification: 'successfully added ' + (req.params.model.replace('_', ' ')), data: await control.update(req.params.model, req.body, { where: { id: req.params.id } }) });
+                    return res.status(200).json({ status: true, notification: 'successfully updated ' + (req.params.model.replace('_', ' ')), data: await control.update(req.params.model, req.body, { where: { id: req.params.id } }) });
                     break;
                 }
-                res.status(200).json({ status: true, notification: 'successfully added ' + req.params.model, data: await control.update(req.params.model, req.body, { where: { id: req.params.id } }) });
+                res.status(200).json({ status: true, notification: 'successfully updated ' + req.params.model, data: await control.update(req.params.model, req.body, { where: { id: req.params.id } }) });
                 break;
         }
     } catch (error) {
@@ -294,7 +322,11 @@ router.post('/:role/:model/edit/:id', isLoggedIn, user().any(), async (req, res)
 });
 
 router.get('/:role/:model/upload/:id', isLoggedIn, async (req, res) => {
-    res.render(`${req.params.role}/${req.params.model}/upload`, { layout: false, action: `/backend/${req.params.role}/${req.params.model}/upload/${req.params.id}` });
+    const control = new Controllers(req);
+    let mmodel = await control.single(req.params.model, { where: { id: req.params.id }, include: [{ model: models['uploads'] }] });
+    let upload = mmodel.upload;
+    console.log('upload =====>>>>', mmodel);
+    res.render(`${req.params.role}/${req.params.model}/upload`, { layout: false, action: `/backend/${req.params.role}/${req.params.model}/upload/${req.params.id}`, upload: upload });
 });
 
 router.post('/:role/:model/upload/:id', isLoggedIn, user().single('file'), async (req, res) => {
@@ -302,15 +334,34 @@ router.post('/:role/:model/upload/:id', isLoggedIn, user().single('file'), async
     try {
         switch (req) {
             case 'files':
+                if (req.body.fileId) {
+
+                }
                 console.log('fields::', req.files);
                 res.status(200).json({ status: true, notification: 'successfully uploaded files!' });
                 break;
 
             default:
-                let file = await control.create('uploads', req.file);
-                console.log(file);
-                await control.update(req.params.model, { uploadId: file.id }, { where: { id: req.params.id } });
-                res.status(200).json({ status: true, notification: 'successfully uploaded file!' });
+                let data = req.file;
+                if (req.body.fileId) {
+                    let oldFile = await control.single('uploads', { where: { id: req.body.fileId } });
+                    data['caption'] = req.body.caption;
+                    await control.update('uploads', data, { where: { id: req.body.fileId } });
+                    console.log(data);
+                    /** delete file with multer */
+                    /** currently using file system */
+
+                    res.status(200).json({ status: true, notification: 'successfully updated upload file!' });
+                } else {
+                    if (data) {
+                        data['caption'] = req.body.caption;
+
+                        let file = await control.create('uploads', data);
+                        console.log(file);
+                        await control.update(req.params.model, { uploadId: file.id }, { where: { id: req.params.id } });
+                        res.status(200).json({ status: true, notification: 'successfully uploaded file!' });
+                    }
+                }
                 break;
         }
     } catch (error) {

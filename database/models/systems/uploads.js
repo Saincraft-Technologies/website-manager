@@ -29,6 +29,9 @@ uploads = sequelize.define('uploads', {
     },
     watermark: {
         type: DataTypes.STRING,
+    },
+    caption: {
+        type: DataTypes.STRING,
     }
 }, { paranoid: true });
 module.exports = uploads;

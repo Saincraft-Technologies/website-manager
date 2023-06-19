@@ -32,8 +32,24 @@ const contents = require("./contents/contents");
 const articles = require("./articles/articles");
 const article_sections = require("./articles/article_sections");
 const content_sections = require("./sections/content_sections");
-
+const members = require("./members/members");
+const teams = require("./members/teams");
+const bills = require("./systems/bills");
+const charges = require("./systems/charges");
+const methods = require("./systems/methods");
+const sessions = require("./systems/sessions");
+const usages = require("./systems/usages");
+const payments = require("./systems/payments");
 module.exports = {
+
+    bills,
+    charges,
+    methods,
+    sessions,
+    usages,
+    payments,
+    members,
+    teams,
     content_sections,
     sections,
     websites,

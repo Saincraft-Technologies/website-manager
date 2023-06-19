@@ -44,20 +44,18 @@
 <script src="{{{cdn 'public'}}}/js/barcode/barcode.js"></script>
 <script src="{{{cdn 'public'}}}/js/barcode/barcode.min.js"></script>
 <script>
-    $(document).ready(() => {
+    //$(document).ready(() => {
 
-        (localStorage.getItem('displayName')) ? localStorage.getItem('displayName') : localStorage.setItem('displayName', 'Home');
-        (localStorage.getItem('mainDisplayName')) ? localStorage.getItem('mainDisplayName') : localStorage.setItem('mainDisplayName', 'Home');
-        (localStorage.getItem('prevMainDisplayName')) ? null : localStorage.setItem('prevMainDisplayName', '');
-        let currentRoute = location.pathname;
-        (localStorage.getItem('prevRoute')) ? null : localStorage.setItem('prevRoute', currentRoute);
-        (localStorage.getItem('currentRoute')) ? null : localStorage.setItem('currentRoute', currentRoute);
-        //loadPage('/dashboard', localStorage.getItem('displayName'), localStorage.getItem('displayName'), localStorage.getItem('mainDisplayName'));
-    });
+    (localStorage.getItem('displayName')) ? localStorage.getItem('displayName') : localStorage.setItem('displayName', 'Home');
+    (localStorage.getItem('mainDisplayName')) ? localStorage.getItem('mainDisplayName') : localStorage.setItem('mainDisplayName', 'Home');
+    (localStorage.getItem('prevMainDisplayName')) ? null : localStorage.setItem('prevMainDisplayName', '');
+    let currentRoute = location.pathname;
+    (localStorage.getItem('prevRoute')) ? null : localStorage.setItem('prevRoute', currentRoute);
+    (localStorage.getItem('currentRoute')) ? null : localStorage.setItem('currentRoute', currentRoute);
+    loadPage('/backend/{{viewManager.role.role}}/dashboard', localStorage.getItem('displayName'), localStorage.getItem('displayName'), localStorage.getItem('mainDisplayName'));
+    //});
 
-    null
-    var oldroute = "/dashboard";
-    var oldrouteIn = "Dashboard";
+
     function loadPage(route, name, title, item) {
         //location.pathname = route;
         let currentRoute2 = location.pathname;
@@ -78,7 +76,7 @@
                 success: (data) => {
                     $('.content_holder').html('');
                     $('.content_holder').html(data);
-                    $('#mainTitle').html('RCMS |' + name);
+                    $('#mainTitle').html('Web-Manager |' + name);
                 }
             })
         }
@@ -96,6 +94,7 @@
         $('#' + localStorage.getItem('mainDisplayName') + '-main-ul').addClass('in');
         $('#' + localStorage.getItem('displayName') + '-small-li').addClass('active');
         $('#' + localStorage.getItem('displayName') + '-small-a').addClass('active');
+        return;
 
     }
 </script>

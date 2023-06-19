@@ -10,6 +10,13 @@ router.get('/signin', notLoggedIn, (req, res) => {
         layout: "auth", theme: req.cookies.theme,
     })
 });
+router.get('/recovery', notLoggedIn, (req, res) => {
+    // console.log(req.cookies);
+    (req.cookies.theme == undefined) ? res.cookie('theme', 'light') : req.cookies.theme;
+    res.render('forgot', {
+        layout: "auth", theme: req.cookies.theme,
+    })
+});
 router.get('/signup', notLoggedIn, async (req, res) => {
     // let oldUser = JSON.parse(JSON.stringify(await (await new Finds())._businesses()));
     res.render('register', {
@@ -19,7 +26,7 @@ router.get('/signup', notLoggedIn, async (req, res) => {
 });
 
 router.post('/signin', passport.authenticate('local', {
-    successRedirect: '/backend',
+    successRedirect: '/',
     failureRedirect: '/auth/signin',
     failureFlash: true
 }));

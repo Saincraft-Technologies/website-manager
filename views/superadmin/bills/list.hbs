@@ -12,11 +12,19 @@
         </tr>
     </thead>
     <tbody>
-        {{#each contents}}
+        {{#each bills}}
         <tr>
-            <td>{{content}}<br>{{descriptions}}
+            <td>{{setHomeDate updatedAt}}</td>
+
+            <td>{{charge.charge}}<br>
+                {{money charge.amount}} / {{charge.duration}}
             </td>
-            <td>{{caption}}
+            <td>{{usage.definition}}
+            </td>
+            <td><strong>Site for:</strong> {{website.owner}}<br>
+            </td>
+            <td></td>
+            <td></td>
             <td>
                 <div class="dropdown text-center">
                     <button type="button"
@@ -25,7 +33,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item"
-                            onclick="largeModal('/backend/{{../route}}/edit/{{id}}', 'Update {{../model}}', 'mdi mdi-pencil text-info');"><i
+                            onclick="largeModal('/backend/{{../route}}/edit/{{id}}', 'Update {{../model}}',' mdi mdi-pencil');"><i
                                 class="mdi mdi-update text-info"></i> edit</a>
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item"

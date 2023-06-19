@@ -1,0 +1,79 @@
+<script src="{{{cdn 'public'}}}/js/select2.min.js"></script>
+<form method="POST" class="d-block ajaxForm" action="{{action}}">
+    <div class="form-row">
+        <div class="form-group row col-md-12">
+            <div class="form-group col-md-6">
+                <label for="usage">
+                    usage
+                </label>
+                <select class="form-control" name="usage" id="usage" selected>
+                    <option value="DEF">as defined</option>
+                    <option value="UPDATE">update</option>
+                    <option value="ENTRY">entry</option>
+                    <option value="DELETE">delete</option>
+                    <option value="SAVE">save</option>
+                    <option value="UPLOAD">upload</option>
+                </select>
+                <small id="" class="form-text text-muted">
+                    provide usage </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="definition">
+                    definition
+                </label>
+                <input type="text" placeholder="definition" value="{{usage.definition}}" class="form-control"
+                    id="definition" name="definition" required>
+                <small id="" class="form-text text-muted">
+                    provide usage definition
+                </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="websiteId">
+                    website
+                </label>
+                <select type="text" placeholder="websiteId" value="{{usage.websiteId}}" class="form-control"
+                    id="website" name="websiteId" required>
+                    <option value="">select website</option>
+                    {{#each websites}}
+                    <option value="{{id}}">{{owner}}</option>
+                    {{/each}}
+                </select>
+                <small id="" class="form-text text-muted">
+                    provide usage website
+                </small>
+            </div>
+        </div>
+        <div class="form-group row col-md-12">
+
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-info" type="submit">
+                    {{#if usage}}
+                    update usage
+                    {{else}}
+                    create usage
+                    {{/if}}
+                </button>
+            </div>
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-secondary" type="reset" data-dismiss="modal">
+                    cancel
+                </button>
+            </div>
+        </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#website').select2({
+            dropdownParent: $('#large-modal')
+        }); $('#usage').select2({
+            dropdownParent: $('#large-modal')
+        });
+    });
+
+    $(".ajaxForm").validate({}); // Jquery form validation initialization
+    $(".ajaxForm").submit(function (e) {
+        var form = $(this);
+        ajaxSubmit(e, form, 'POST', showAllManages);
+    });
+</script>

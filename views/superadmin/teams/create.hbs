@@ -1,0 +1,90 @@
+<form method="POST" class="d-block ajaxForm" action="{{action}}">
+    <div class="form-row">
+
+        <div class="form-group col-md-6">
+            <label for="team">
+                team name
+            </label>
+            <input type="text" placeholder="team name" value="{{team.team}}" class="form-control" id="team" name="team"
+                required>
+            <small id="" class="form-text text-muted">
+                provide team
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="descriptions">
+                descriptions
+            </label>
+            <textarea placeholder="descriptions .." class="form-control" id="descriptions" name="descriptions"
+                required>{{#if team}}{{team.descriptions}}{{else}}{{/if}}</textarea>
+            <small id="" class="form-text text-muted">
+                provide descriptions
+            </small>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="comment">
+                comment
+            </label>
+            <textarea placeholder="comment .." class="form-control" id="comment" name="comment"
+                required>{{#if team}}{{team.comment}}{{else}}{{/if}}</textarea>
+            <small id="" class="form-text text-muted">
+                provide comment
+            </small>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="discord">
+                social networks
+            </label>
+            <input type="text" placeholder="discord" value="{{team.discord}}" class="form-control" id="discord"
+                name="discord" required>
+            <small id="" class="form-text text-muted">
+                provide discord team social
+            </small>
+            <input type="text" placeholder="facebook" value="{{team.facebook}}" class="form-control mt-2" id="facebook"
+                name="facebook" required>
+            <small id="" class="form-text text-muted">
+                provide facebook groups social
+            </small>
+        </div>
+    </div>
+    <div class="form-row">
+
+        <div class="form-group mt-2 col-md-6">
+            <button class="btn btn-block btn-info" type="submit">
+                {{#if team}}
+
+                <img class="hidden loader" src="{{{cdn 'public'}}}/images/loader.gif" alt="" height="10px;">
+                <i class="mdi mdi-pen icon" style="font-weight: 600;"></i>
+                update team
+                {{else}}
+                <img class="hidden loader" src="{{{cdn 'public'}}}/images/loader.gif" alt="" height="10px;">
+                <i class="mdi mdi-pen icon" style="font-weight: 600;"></i>
+                create team
+                {{/if}}
+            </button>
+        </div>
+        <div class="form-group mt-2 col-md-6">
+            <button class="btn btn-block btn-secondary" type="reset" data-dismiss="modal">
+                cancel
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#pageId').select2({
+            dropdownParent: $('#large-modal')
+        });
+    });
+
+    $(".ajaxForm").validate({}); // Jquery form validation initialization
+    $(".ajaxForm").submit(function (e) {
+        $('.loader').removeClass('hidden');
+        $('.icon').addClass('hidden');
+        var form = $(this);
+        ajaxSubmit(e, form, 'POST', showAllManages);
+    });
+</script>

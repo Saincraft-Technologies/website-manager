@@ -12,11 +12,13 @@
         </tr>
     </thead>
     <tbody>
-        {{#each contents}}
+        {{#each sessions}}
         <tr>
-            <td>{{content}}<br>{{descriptions}}
+            <td> {{year}}
             </td>
-            <td>{{caption}}
+            <td>{{month}}
+            </td>
+            <td>{{date}}</td>
             <td>
                 <div class="dropdown text-center">
                     <button type="button"
@@ -25,7 +27,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item"
-                            onclick="largeModal('/backend/{{../route}}/edit/{{id}}', 'Update {{../model}}', 'mdi mdi-pencil text-info');"><i
+                            onclick="largeModal('/backend/{{../route}}/edit/{{id}}', 'Update {{../model}}',' mdi mdi-pencil');"><i
                                 class="mdi mdi-update text-info"></i> edit</a>
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item"

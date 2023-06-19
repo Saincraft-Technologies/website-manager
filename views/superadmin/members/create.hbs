@@ -1,0 +1,184 @@
+<script src="{{{cdn 'public'}}}/js/select2.min.js"></script>
+<form method="POST" class="d-block ajaxForm" action="{{action}}">
+    <div class="form-row">
+
+        <div class="form-group col-md-6">
+            <label for="site_visibilityid">
+                show on website
+            </label>
+            <select name="site_visibility" id="site_visibility" class="select2 form-control">
+                <option value="0" selected>No</option>
+                <option value="1">Yes</option>
+            </select>
+            <small id="" class="form-text text-muted">
+                provide site visibility
+            </small>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="team">
+                select team
+            </label>
+            <select class="form-control select2" name="teamId" id="teamId">
+                <option value="" selected>select team</option>
+                {{#each teams}}
+                {{#ifEquals id ../member.teamId}}
+                <option value="{{id}}" selected>{{team}}</option>
+                {{else}}
+                <option value="{{id}}">{{team}}</option>
+                {{/ifEquals}}
+                {{/each}}
+            </select>
+            <small id="" class="form-text text-muted">
+                provide member team
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="member">
+                member name
+            </label>
+            <input type="text" placeholder="member name" value="{{member.member}}" class="form-control" id="member"
+                name="member" required>
+            <small id="" class="form-text text-muted">
+                provide member
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="position">
+                member position
+            </label>
+            <input type="text" placeholder="member position" value="{{member.position}}" class="form-control"
+                id="position" name="position" required>
+            <small id="" class="form-text text-muted">
+                provide position
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="email">
+                member email
+            </label>
+            <input type="email" placeholder="member email" value="{{member.email}}" class="form-control" id="email"
+                name="email" required>
+            <small id="" class="form-text text-muted">
+                Email will be visible at website.
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="phone">
+                member phone
+            </label>
+            <input type="text" placeholder="member phone" value="{{member.phone}}" class="form-control" id="phone"
+                name="phone" required>
+            <small id="" class="form-text text-muted">
+                Phone will be visible at website.
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="comment">
+                comment
+            </label>
+            <textarea placeholder="comment .." class="form-control" id="comment" name="comment"
+                required>{{#if member}}{{member.comment}}{{else}}{{/if}}</textarea>
+            <small id="" class="form-text text-muted">
+                provide comment
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="biography">
+                biography
+            </label>
+            <textarea placeholder="biography .." class="form-control" id="biography" name="biography"
+                required>{{#if member}}{{member.biography}}{{else}}{{/if}}</textarea>
+            <small id="" class="form-text text-muted">
+                provide biography
+            </small>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="networks">
+                social networks
+            </label>
+            <input type="text" placeholder="facebook" value="{{member.facebook}}" class="form-control" id="facebook"
+                name="facebook" required>
+            <small id="" class="form-text text-muted">
+                provide facebook social link
+            </small>
+            <input type="text" placeholder="tweeter" value="{{member.tweeter}}" class="form-control" id="tweeter"
+                name="tweeter" required>
+            <small id="" class="form-text text-muted">
+                provide tweeter social link
+            </small>
+            <input type="text" placeholder="linkedIn" value="{{member.linkedIn}}" class="form-control" id="linkedIn"
+                name="linkedIn" required>
+            <small id="" class="form-text text-muted">
+                provide linkedIn social link
+            </small>
+            <input type="text" placeholder="tiktok" value="{{member.tiktock}}" class="form-control" id="tiktock"
+                name="tiktock" required>
+            <small id="" class="form-text text-muted">
+                provide tiktok social link
+            </small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="channels">
+                social channels
+            </label>
+            <input type="text" placeholder="instagram" value="{{member.instagram}}" class="form-control" id="instagram"
+                name="instagram" required>
+            <small id="" class="form-text text-muted">
+                provide instagram social link
+            </small>
+            <input type="text" placeholder="youtube" value="{{member.youtube}}" class="form-control" id="youtube"
+                name="youtube" required>
+            <small id="" class="form-text text-muted">
+                provide youtube social link
+            </small>
+            <input type="text" placeholder="discord" value="{{member.discord}}" class="form-control" id="discord"
+                name="discord" required>
+            <small id="" class="form-text text-muted">
+                provide discord social link
+            </small>
+        </div>
+    </div>
+    <div class="form-row">
+
+        <div class="form-group mt-2 col-md-6">
+            <button class="btn btn-block btn-info" type="submit">
+                {{#if member}}
+
+                <img class="hidden loader" src="{{{cdn 'public'}}}/images/loader.gif" alt="" height="10px;">
+                <i class="mdi mdi-pen icon" style="font-weight: 600;"></i>
+                update member
+                {{else}}
+                <img class="hidden loader" src="{{{cdn 'public'}}}/images/loader.gif" alt="" height="10px;">
+                <i class="mdi mdi-pen icon" style="font-weight: 600;"></i>
+                create member
+                {{/if}}
+            </button>
+        </div>
+        <div class="form-group mt-2 col-md-6">
+            <button class="btn btn-block btn-secondary" type="reset" data-dismiss="modal">
+                cancel
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#site_visibility').select2({
+            dropdownParent: $('#large-modal')
+        });
+        $('#teamId').select2({
+            dropdownParent: $('#large-modal')
+        });
+    });
+
+    $(".ajaxForm").validate({}); // Jquery form validation initialization
+    $(".ajaxForm").submit(function (e) {
+        $('.loader').removeClass('hidden');
+        $('.icon').addClass('hidden');
+        var form = $(this);
+        ajaxSubmit(e, form, 'POST', showAllManages);
+    });
+</script>

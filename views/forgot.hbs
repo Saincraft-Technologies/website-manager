@@ -9,7 +9,7 @@
                         <span><img src="{{{cdn 'public'}}}/icons/LogoC@300x.png" alt="" height=" 75"></span>
                     </a>
                 </div>
-                <h4 class="mt-0">Sign in</h4>
+                <h4 class="mt-0">Recovery</h4>
                 <p class="text-muted mb-4">Enter your email</p>
                 {{#if messages.error}}
                 <div class="alert alert-danger mt-3">
@@ -21,37 +21,16 @@
                     {{/ifEquals}}
                 </div>
                 {{/if}}
-                <!-- form -->
-                <form action="/auth/signin" method="post" id="loginForm">
-                    <div class="form-group">
-                        <label for="emailaddress">email</label>
-                        <input class="form-control" type="email" name="email" id="emailaddress" required=""
-                            placeholder="enter your email">
-                    </div>
-                    <div class="form-group">
-                        <a href="/auth/recovery"  class="text-muted float-right"><small>forgot password</small></a>
-                        <label for="password">password</label>
-                        <input class="form-control" type="password" name="password" required="" id="password"
-                            placeholder=" enter your password">
-                        <span class="text-danger" id="error_message"></span>
-                    </div>
-                    <div class="form-group mb-0 text-center">
-                        <button class="btn btn-primary btn-block" type="submit"><i class="mdi mdi-login"></i>
-                            Sign in </button>
-                        <a href="/auth/signup" class="text-muted float-left" style="float: left;"><small> register?
-                            </small></a>
-                    </div>
-                </form>
 
-                <form action="/forgot" method="post" id="forgotForm" style="display: none;">
+                <form action="/forgot" method="post" id="forgotForm">
                     <div class="form-group">
-                        <a href="/signin" class="text-muted float-right"><small>back to login</small></a>
+                        <a href="/auth/signin" class="text-muted float-right"><small>back to login</small></a>
                         <label for="forgotEmail">email</label>
                         <input class="form-control" type="email" name="email" required="" id="forgotEmail"
                             placeholder="enter your email">
                     </div>
                     <div class="form-group mb-0 text-center">
-                        <button class="btn btn-primary btn-block" type="submit"><i class="mdi mdi-login"></i>sent
+                        <button class="btn btn-primary btn-block" type="submit"><i class="mdi mdi-login"></i> sent
                             password reset link</button>
                     </div>
 
@@ -97,7 +76,7 @@
             }
         });
     }
-    {{!-- getLanguageList(); --}}
+    { { !--getLanguageList(); --} }
     function changeLanguage() {
         let code = $('#language-list').val();
         $.ajax({

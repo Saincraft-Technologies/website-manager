@@ -9,7 +9,11 @@
             <select class="form-control select2" name="contentId" id="contentId" required>
                 <option value="" selected>select content</option>
                 {{#each contents}}
+                {{#ifEquals id ../content_section.contentId}}
+                <option value="{{id}}" selected>{{content}}</option>
+                {{else}}
                 <option value="{{id}}">{{content}}</option>
+                {{/ifEquals}}
                 {{/each}}
             </select>
             <small id="" class="form-text text-muted">
@@ -23,7 +27,11 @@
             <select class="form-control select2" name="sectionId" id="sectionId" required>
                 <option value="" selected>select section</option>
                 {{#each sections}}
+                {{#ifEquals id ../content_section.sectionId}}
+                <option value="{{id}}" selected>{{section}}</option>
+                {{else}}
                 <option value="{{id}}">{{section}}</option>
+                {{/ifEquals}}
                 {{/each}}
             </select>
             <small id="" class="form-text text-muted">
@@ -36,7 +44,7 @@
                 content section paragraphs
             </label>
             <textarea name="paragraph" id="paragraph" placeholder="paragraphs" class="form-control" cols="30"
-                rows="10">{{section_content.paragraph}}</textarea>
+                rows="10">{{content_section.paragraph}}</textarea>
 
             <small id="" class="form-text text-muted">
                 provide paragraph
@@ -46,9 +54,13 @@
 
             <div class="form-group mt-2 col-md-6">
                 <button class="btn btn-block btn-info" type="submit">
-                    {{#if user}}
+                    {{#if content_section}}
+                    <img class="hidden loader" src="{{{cdn 'public'}}}/images/loader.gif" alt="" height="10px;">
+                    <i class="mdi mdi-pen icon" style="font-weight: 600;"></i>
                     update section content
                     {{else}}
+                    <img class="hidden loader" src="{{{cdn 'public'}}}/images/loader.gif" alt="" height="10px;">
+                    <i class="mdi mdi-pen icon" style="font-weight: 600;"></i>
                     create section content
                     {{/if}}
                 </button>
@@ -73,6 +85,8 @@
 
     $(".ajaxForm").validate({}); // Jquery form validation initialization
     $(".ajaxForm").submit(function (e) {
+        $('.loader').removeClass('hidden');
+        $('.icon').addClass('hidden');
         var form = $(this);
         ajaxSubmit(e, form, 'POST', showAllManages);
     });

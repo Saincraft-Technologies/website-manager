@@ -1,0 +1,123 @@
+<table id="basic-datatable" class="table table-striped td-responsive nowrap" width="100%">
+    <thead>
+        <tr style="background-color: #313a46; color: #ababab;">
+            {{#each headers}}
+            {{#ifEquals head 'position'}}
+            {{else}}
+            {{#ifEquals head 'email'}}
+            {{else}}
+            {{#ifEquals head 'phone'}}
+            {{else}}
+            {{#ifEquals head 'discord'}}
+
+            {{else}}
+            {{#ifEquals head 'facebook'}}
+
+            {{else}}
+            {{#ifEquals head 'tweeter'}}
+
+            {{else}}
+            {{#ifEquals head 'linkedIn'}}
+
+            {{else}}
+            {{#ifEquals head 'instagram'}}
+
+            {{else}}
+            {{#ifEquals head 'tiktock'}}
+
+            {{else}}
+            {{#ifEquals head 'youtube'}}
+            <th>socials</th>
+            {{else}}
+            <th>{{head}}</th>
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/ifEquals}}
+            {{/each}}
+
+            <th>options</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each members}}
+        <tr>
+            <td class="row">
+                <div class="mt-2 col-md-8 col-sm-6">
+                    Name: {{member}}<br>
+                    Position: {{position}}<br>
+                    Email: <a href="mailTo:{{email}}">{{email}}</a><br>
+                    Phone: {{phone}}<br>
+                </div>
+            </td>
+            </td>
+            <td>
+
+                <i class="mdi mdi-facebook"></i> Facebook: <span
+                    style="text-decoration: underline;">{{facebook}}</span><br>
+                <i class="mdi mdi-linkedin"></i> LinkedIn: <span
+                    style="text-decoration: underline;">{{linkedIn}}</span><br>
+                <i class="mdi mdi-instagram"></i> Instagram: <span
+                    style="text-decoration: underline;">{{instagram}}</span><br>
+                <i class="mdi mdi-youtube"></i> Youtube: <span
+                    style="text-decoration: underline;">{{youtube}}</span><br>
+                <i class="mdi mdi-tweeter"></i> Tweeter: <span
+                    style="text-decoration: underline;">{{tweeter}}</span><br>
+                <i class="mdi mdi-tiktok"></i> Tiktok: <span style="text-decoration: underline;">{{tiktock}}</span><br>
+                <i class="mdi mdi-social"></i> Discord: <a href="http://" target="_blank"
+                    rel="noopener noreferrer"><span style="text-decoration: underline;">{{discord}}</span></a><br>
+            </td>
+            <td>{{biography}}
+            </td>
+            <td>{{comment}}
+            </td>
+            <td>
+                <input type="checkbox" value="{{site_visibility}}" id="site_visibility" data-switch="info" {{#ifEquals
+                    site_visibility 1}} checked{{/ifEquals}} disabled>
+                <label for="site_visibility" data-on-label="Yes" data-off-label="No"></label>
+            </td>
+            <td>{{setHomeDate updatedAt}}
+            </td>
+            <td>{{team.team}}
+            </td>
+            <td class="row">
+                <div class="mt-0 col-md-3 col-sm-6">
+                    <div class=" js--image-preview"
+                        style="background-image: url({{#if upload}}{{image}}{{upload.path}}{{else}}{{{cdn 'public'}}}/images/avatar.jpg{{/if}});width:100px;height:100px; background-color::after;">
+                    </div>
+                </div>
+                <div class="mt-0 ml-3 col-md-8 col-sm-5">
+                    {{upload.caption}}
+                </div>
+            </td>
+            <td>
+                <div class="dropdown text-center">
+                    <button type="button"
+                        class="btn btn-sm btn-icon btn-rounded btn-outline-secondary dropdown-btn dropdown-toggle arrow-none card-drop"
+                        data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-vertical"></i></button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item"
+                            onclick="largeModal('/backend/{{../route}}/edit/{{id}}', 'update {{../model}}', 'mdi mdi-pencil text-info');"><i
+                                class="mdi mdi-update text-info"></i> edit</a>
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item"
+                            onclick="mediumModal('/backend/{{../route}}/upload/{{id}}', 'upload {{../model}} image', 'mdi mdi-account-box text-info');"><i
+                                class="mdi mdi-account-box text-info"></i> upload</a>
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item"
+                            onclick="confirmModal('/{{../route}}/delete/{{id}}', showAllManages)"><i
+                                class="mdi mdi-delete text-danger"></i> delete</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

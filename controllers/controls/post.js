@@ -1,5 +1,3 @@
-module.exports = {
-    contact: async () => {
-        
-    }
+module.exports = (req, res, next) => {
+
 }

@@ -3,43 +3,47 @@
     <div class="form-row">
         <div class="form-group row col-md-12">
             <div class="form-group col-md-6">
-                <label for="page_name">
-                    page name
+                <label for="websiteId">
+                    website
                 </label>
-                <input type="text" placeholder="page name" value="{{page.page_name}}" class="form-control" id="page_name"
-                    name="page_name" required>
+                <select type="text" placeholder="websiteId" value="{{usage.websiteId}}" class="form-control"
+                    id="website" name="websiteId" required>
+                    <option value="">select website</option>
+                    {{#each websites}}
+                    <option value="{{id}}">{{owner}}</option>
+                    {{/each}}
+                </select>
                 <small id="" class="form-text text-muted">
-                    provide page name should be small letter & no space. Since it is used to create routes.
+                    provide usage website
+                </small>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="usageId">
+                    Usage
+                </label>
+                <select type="text" placeholder="usage" class="form-control" id="usageId" name="usageId" required>
+                    <option value="">select usage</option>
+                    {{#each usages}}
+                    <option value="{{id}}">{{usage}}</option>
+                    {{/each}}
+                </select>
+                <small id="" class="form-text text-muted">
+                    provide usage
                 </small>
             </div>
             <div class="form-group col-md-6">
-                <label for="title">
-                    title
+                <label for="chargeId">
+                    charge
                 </label>
-                <input type="text" placeholder="title" value="{{page.title}}" class="form-control" id="title"
-                    name="title" required>
+                <select type="text" placeholder="charge" class="form-control" id="chargeId" name="chargeId" required>
+                    <option value="">select charge</option>
+                    {{#each charges}}
+                    <option value="{{id}}">{{charge}}</option>
+                    {{/each}}
+                </select>
                 <small id="" class="form-text text-muted">
-                    provide page title
-                </small>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="caption">
-                    caption
-                </label>
-                <textarea placeholder="caption .." class="form-control" id="caption" name="caption"
-                    required>{{page.caption}}</textarea>
-                <small id="" class="form-text text-muted">
-                    provide caption
-                </small>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="description">
-                    description
-                </label>
-                <textarea placeholder="description .." class="form-control" id="description"
-                    name="description">{{page.description}}</textarea>
-                <small id="" class="form-text text-muted">
-                    provide description
+                    provide charge
                 </small>
             </div>
         </div>
@@ -64,6 +68,13 @@
 
 <script>
     $(document).ready(function () {
+        $('#chargeId').select2({
+            dropdownParent: $('#large-modal')
+        }); $('#usageId').select2({
+            dropdownParent: $('#large-modal')
+        });$('#website').select2({
+            dropdownParent: $('#large-modal')
+        });
     });
 
     $(".ajaxForm").validate({}); // Jquery form validation initialization

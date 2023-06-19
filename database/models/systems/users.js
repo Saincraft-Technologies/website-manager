@@ -2,6 +2,7 @@ const { UUIDV4 } = require("sequelize");
 const { Model, sequelize, DataTypes } = require("../../mysql");
 const uploads = require("../systems/uploads");
 const locales = require("./locales");
+const sessions = require("./sessions");
 class users extends Model { };
 users = sequelize.define('users', {
     id: {

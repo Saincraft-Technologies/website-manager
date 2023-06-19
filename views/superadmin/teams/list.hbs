@@ -2,9 +2,17 @@
     <thead>
         <tr style="background-color: #313a46; color: #ababab;">
             {{#each headers}}
-            {{#ifEquals head 'description'}}
+            {{#ifEquals head 'descriptions'}}
+            {{else}}
+            {{#ifEquals head 'discord'}}
+
+            {{else}}
+            {{#ifEquals head 'facebook'}}
+            <th>socials</th>
             {{else}}
             <th>{{head}}</th>
+            {{/ifEquals}}
+            {{/ifEquals}}
             {{/ifEquals}}
             {{/each}}
 
@@ -12,19 +20,21 @@
         </tr>
     </thead>
     <tbody>
-        {{#each sections}}
+        {{#each teams}}
         <tr>
             <td class="row">
-                <div class="col-sm-6">
-                    <div class="rounded-circle rounded-bottom js--image-preview" style="background-image: url({{#if upload}}{{image}}{{upload.path}}{{else}}{{{cdn 'public'}}}/images/avatar.jpg{{/if}});width:100px;
-                        height:100px; background-color: #F5F5F5;">
-                    </div>
-                    <div class="mt-1 col-md-8 col-sm-6">
-                        {{section}}
-                    </div>
+                <div class="mt-1 col-md-8 col-sm-6">
+                    Name: {{team}}<br>
+                    <span style="text-decoration: underline;">descriptions</span> <br>{{descriptions}}
                 </div>
             </td>
-            <td>{{caption}}
+            <td>
+                <i class="mdi mdi-social"></i> Discord: <a href="http://" target="_blank"
+                    rel="noopener noreferrer"><span style="text-decoration: underline;">{{discord}}</span></a><br>
+                <i class="mdi mdi-facebook"></i> Facebook: <span style="text-decoration: underline;">{{facebook}}</span>
+            </td>
+            <td>{{comment}}
+            </td>
             <td>
                 <div class="dropdown text-center">
                     <button type="button"

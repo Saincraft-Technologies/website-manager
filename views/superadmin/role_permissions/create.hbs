@@ -67,12 +67,13 @@
         }); $('#roleId').select2({
             dropdownParent: $('#large-modal')
         });
-        addAddress();
-        addPhone();
     });
 
     $(".ajaxForm").validate({}); // Jquery form validation initialization
     $(".ajaxForm").submit(function (e) {
+
+        $('.loader').removeClass('hidden');
+        $('.icon').addClass('hidden');
         var form = $(this);
         ajaxSubmit(e, form, 'POST', showAllManages);
     });
