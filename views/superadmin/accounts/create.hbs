@@ -1,0 +1,87 @@
+<script src="{{{cdn 'public'}}}/js/select2.min.js"></script>
+<form method="POST" class="d-block ajaxForm" action="{{action}}">
+    <div class="form-row">
+        <div class="form-group row col-md-12">
+           
+            <div class="form-group col-md-6">
+                <label for="account">
+                    account
+                </label>
+                <input type="text" placeholder="account name" value="{{account.account}}"
+                    class="form-control" id="account" name="account" required>
+                <small id="" class="form-text text-muted">
+                    provide account account
+                </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="acc_number">
+                    Account number
+                </label>
+                <input type="text" placeholder="payment account number" value="{{account.acc_number}}"
+                    class="form-control" id="acc_number" name="acc_number" required>
+                <small id="" class="form-text text-muted">
+                    provide account acc_number
+                </small>
+            </div>
+
+        <div class="form-group col-md-6">
+            <label for="methodId">
+                select method
+            </label>
+            <select class="form-control select2" name="methodId" id="methodId">
+                <option value="" selected>select team</option>
+                {{#each methods}}
+                {{#ifEquals id ../account.methodId}}
+                <option value="{{id}}" selected>{{provider}} {{method}}</option>
+                {{else}}
+                <option value="{{id}}">{{team}}</option>
+                {{/ifEquals}}
+                {{/each}}
+            </select>
+            <small id="" class="form-text text-muted">
+                provide account method
+            </small>
+        </div>
+            <div class="form-group col-md-6">
+                <label for="receipt_length">
+                    receipt_length
+                </label>
+                <input type="text" placeholder="receipt_length" value="{{account.receipt_length}}" class="form-control"
+                    id="receipt_length" name="receipt_length" required>
+                <small id="" class="form-text text-muted">
+                    provide account receipt_length
+                </small>
+            </div>
+        </div>
+        <div class="form-group row col-md-12">
+
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-info" type="submit">
+                    {{#if account}}
+                    update account
+                    {{else}}
+                    create account
+                    {{/if}}
+                </button>
+            </div>
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-secondary" type="reset" data-dismiss="modal">
+                    cancel
+                </button>
+            </div>
+        </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#account').select2({
+            dropdownParent: $('#large-modal')
+        });
+    });
+
+    $(".ajaxForm").validate({}); // Jquery form validation initialization
+    $(".ajaxForm").submit(function (e) {
+        var form = $(this);
+        ajaxSubmit(e, form, 'POST', showAllManages);
+    });
+</script>

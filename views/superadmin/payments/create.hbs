@@ -3,23 +3,23 @@
     <div class="form-row">
         <div class="form-group row col-md-12">
             <div class="form-group col-md-6">
-                <label for="page_name">
-                    page name
+                <label for="receipt">
+                    receipt
                 </label>
-                <input type="text" placeholder="page name" value="{{page.page_name}}" class="form-control" id="page_name"
-                    name="page_name" required>
+                <input type="text" placeholder="receipt" value="{{payment.receipt}}" class="form-control" id="receipt"
+                    name="receipt" required>
                 <small id="" class="form-text text-muted">
-                    provide page name should be small letter & no space. Since it is used to create routes.
+                    provide receipt should be small letter & no space. Since it is used to create routes.
                 </small>
             </div>
             <div class="form-group col-md-6">
                 <label for="title">
                     title
                 </label>
-                <input type="text" placeholder="title" value="{{page.title}}" class="form-control" id="title"
+                <input type="text" placeholder="title" value="{{payment.title}}" class="form-control" id="title"
                     name="title" required>
                 <small id="" class="form-text text-muted">
-                    provide page title
+                    provide payment title
                 </small>
             </div>
             <div class="form-group col-md-6">
@@ -27,7 +27,7 @@
                     caption
                 </label>
                 <textarea placeholder="caption .." class="form-control" id="caption" name="caption"
-                    required>{{page.caption}}</textarea>
+                    required>{{payment.caption}}</textarea>
                 <small id="" class="form-text text-muted">
                     provide caption
                 </small>
@@ -37,7 +37,7 @@
                     description
                 </label>
                 <textarea placeholder="description .." class="form-control" id="description"
-                    name="description">{{page.description}}</textarea>
+                    name="description">{{payment.description}}</textarea>
                 <small id="" class="form-text text-muted">
                     provide description
                 </small>
@@ -47,10 +47,10 @@
 
             <div class="form-group mt-2 col-md-6">
                 <button class="btn btn-block btn-info" type="submit">
-                    {{#if page}}
-                    update page
+                    {{#if payment}}
+                    update payment
                     {{else}}
-                    create page
+                    create payment
                     {{/if}}
                 </button>
             </div>

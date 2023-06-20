@@ -9,7 +9,7 @@ methods = sequelize.define('methods', {
         unique: true
     },
     method: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('MOBILE-MONEY', 'BANK', 'CASH','E-PAYMENT'),
         allowNull: false,
     },
     provider: {

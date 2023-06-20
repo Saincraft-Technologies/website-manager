@@ -3,43 +3,55 @@
     <div class="form-row">
         <div class="form-group row col-md-12">
             <div class="form-group col-md-6">
-                <label for="page_name">
-                    page name
+                <label for="method">
+                    select payment method
                 </label>
-                <input type="text" placeholder="page name" value="{{page.page_name}}" class="form-control" id="page_name"
-                    name="page_name" required>
+                <select type="text" placeholder="payment method name" value="{{method.method}}" class="form-control"
+                    id="method" name="method" required>
+                    <option value="" selected>select payment method</option>
+                    {{#ifEquals method.method 'CASH'}}
+                    <option value="CASH" selected>Cash</option>
+                    {{else}}
+                    <option value="CASH">Cash</option>
+                    {{/ifEquals}}
+                    {{#ifEquals method.method 'MOBILE-MONEY'}}
+                    <option value="MOBILE-MONEY" selected>Mobile-money</option>
+                    {{else}}
+                    <option value="MOBILE-MONEY">Mobile-money</option>
+                    {{/ifEquals}}
+                    {{#ifEquals method.method 'BANK'}}
+                    <option value="BANK" selected>Bank</option>
+                    {{else}}
+                    <option value="BANK">Bank</option>
+                    {{/ifEquals}}
+                    {{#ifEquals method.method 'E-PAYMENT'}}
+                    <option value="E-PAYMENT" selected>E-Payment</option>
+                    {{else}}
+                    <option value="E-PAYMENT">E-Payment</option>
+                    {{/ifEquals}}
+                </select>
                 <small id="" class="form-text text-muted">
-                    provide page name should be small letter & no space. Since it is used to create routes.
+                    provide payment method
                 </small>
             </div>
             <div class="form-group col-md-6">
-                <label for="title">
-                    title
+                <label for="provider">
+                    provider
                 </label>
-                <input type="text" placeholder="title" value="{{page.title}}" class="form-control" id="title"
-                    name="title" required>
+                <input type="text" placeholder="payment method provider" value="{{method.provider}}"
+                    class="form-control" id="provider" name="provider" required>
                 <small id="" class="form-text text-muted">
-                    provide page title
+                    provide method provider
                 </small>
             </div>
             <div class="form-group col-md-6">
-                <label for="caption">
-                    caption
+                <label for="receipt_length">
+                    receipt_length
                 </label>
-                <textarea placeholder="caption .." class="form-control" id="caption" name="caption"
-                    required>{{page.caption}}</textarea>
+                <input type="text" placeholder="receipt_length" value="{{method.receipt_length}}" class="form-control"
+                    id="receipt_length" name="receipt_length" required>
                 <small id="" class="form-text text-muted">
-                    provide caption
-                </small>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="description">
-                    description
-                </label>
-                <textarea placeholder="description .." class="form-control" id="description"
-                    name="description">{{page.description}}</textarea>
-                <small id="" class="form-text text-muted">
-                    provide description
+                    provide method receipt_length
                 </small>
             </div>
         </div>
@@ -47,10 +59,10 @@
 
             <div class="form-group mt-2 col-md-6">
                 <button class="btn btn-block btn-info" type="submit">
-                    {{#if page}}
-                    update page
+                    {{#if method}}
+                    update method
                     {{else}}
-                    create page
+                    create method
                     {{/if}}
                 </button>
             </div>
@@ -64,6 +76,9 @@
 
 <script>
     $(document).ready(function () {
+        $('#method').select2({
+            dropdownParent: $('#large-modal')
+        });
     });
 
     $(".ajaxForm").validate({}); // Jquery form validation initialization

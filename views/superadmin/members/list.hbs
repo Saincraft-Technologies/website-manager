@@ -86,15 +86,18 @@
             </td>
             <td>{{team.team}}
             </td>
-            <td class="row">
-                <div class="mt-0 col-md-3 col-sm-6">
-                    <div class=" js--image-preview"
+            <td class="flex-box" style="word-wrap: break-word;">
+                <div class="mt-0 offset-2" style="align-items: center;">
+                    <div class="rounded-circle rounded-bottom js--image-preview"
                         style="background-image: url({{#if upload}}{{image}}{{upload.path}}{{else}}{{{cdn 'public'}}}/images/avatar.jpg{{/if}});width:100px;height:100px; background-color::after;">
                     </div>
                 </div>
-                <div class="mt-0 ml-3 col-md-8 col-sm-5">
-                    {{upload.caption}}
+                <div class="mt-0 ml-0" style="word-wrap: break-word;">
+                    {{upload.caption}}<br>
                 </div>
+                <a href="{{upload.path}}" target="_blank">
+                    view file
+                </a>
             </td>
             <td>
                 <div class="dropdown text-center">
