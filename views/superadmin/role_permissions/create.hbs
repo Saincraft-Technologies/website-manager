@@ -18,7 +18,11 @@
             <select class="form-control select2" name="roleId" id="roleId">
                 <option value="" selected>select role</option>
                 {{#each roles}}
+                {{#ifEquals id ../role_permission.roleId}}
+                <option value="{{id}}" selected>{{role}}</option>
+                {{else}}
                 <option value="{{id}}">{{role}}</option>
+                {{/ifEquals}}
                 {{/each}}
             </select>
             <small id="" class="form-text text-muted">
@@ -33,7 +37,12 @@
             <select class="form-control select2" name="permissionId" id="permissionId">
                 <option value="" selected>select permission</option>
                 {{#each permissions}}
+
+                {{#ifEquals id ../role_permission.permissionId}}
+                <option value="{{id}}" selected>{{permission}}</option>
+                {{else}}
                 <option value="{{id}}">{{permission}}</option>
+                {{/ifEquals}}
                 {{/each}}
             </select>
             <small id="" class="form-text text-muted">

@@ -2,12 +2,9 @@
     <thead>
         <tr style="background-color: #313a46; color: #ababab;">
             {{#each headers}}
-            {{#ifEquals head 'permissions'}}
-            {{else}}
-            {{#ifEquals head 'roles'}}
+            {{#ifEquals head 'description'}}
             {{else}}
             <th>{{head}}</th>
-            {{/ifEquals}}
             {{/ifEquals}}
             {{/each}}
 
@@ -15,16 +12,19 @@
         </tr>
     </thead>
     <tbody>
-        {{#each role_permissions}}
+        {{#each bookings}}
         <tr>
-            <td>{{handler}}
+            <td>{{account}}
             </td>
-            <td>{{role.role}}
+            <td>{{acc_number}}
             </td>
-            <td>{{permission.permission}}
+            <td>{{verified}}
             </td>
-            <td>{{setHomeDate updatedAt}}
+            <td>{{active}}
             </td>
+            <td>{{method.method}}
+            </td>
+            <td>{{setHomeDate updatedAt}}</td>
             <td>
                 <div class="dropdown text-center">
                     <button type="button"
@@ -33,7 +33,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item"
-                            onclick="largeModal('/backend/{{../route}}/edit/{{id}}', 'update {{../model}}','mdi mdi-pencil text-info');"><i
+                            onclick="largeModal('/backend/{{../route}}/edit/{{id}}', 'Update {{../model}}',' mdi mdi-pencil');"><i
                                 class="mdi mdi-update text-info"></i> edit</a>
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item"

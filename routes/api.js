@@ -4,8 +4,8 @@ const models = require('../database/models/module_exporter');
 const { Op } = require('../database/mysql');
 const Controllers = require('../controllers/controls/control');
 const { hasToken, rateLimit, apiLimit } = require('../passport/passport');
-const Getter = require('./getter');
-const Poster = require('./poster');
+const Getter = require('../controllers/controls/api/getter');
+const Poster = require('../controllers/controls/api/poster');
 // const requestor = require('../controllers/requestor');
 
 

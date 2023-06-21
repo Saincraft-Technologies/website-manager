@@ -1,0 +1,44 @@
+<script src="{{{cdn 'public'}}}/js/select2.min.js"></script>
+<form method="POST" class="d-block ajaxForm" action="{{action}}">
+    <div class="form-row">
+        <div class="form-group row col-md-12">
+            <div class="form-group col-md-12">
+                <label for="role">
+                   role
+                </label>
+                <input type="text" placeholder="role name" value="{{role.role}}" class="form-control" id="role"
+                    name="role" required>
+                <small id="" class="form-text text-muted">
+                    provide role 
+                </small>
+            </div>
+        </div>
+        <div class="form-group row col-md-12">
+
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-info" type="submit">
+                    {{#if role}}
+                    update role
+                    {{else}}
+                    create role
+                    {{/if}}
+                </button>
+            </div>
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-secondary" type="reset" data-dismiss="modal">
+                    cancel
+                </button>
+            </div>
+        </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+    });
+
+    $(".ajaxForm").validate({}); // Jquery form validation initialization
+    $(".ajaxForm").submit(function (e) {
+        var form = $(this);
+        ajaxSubmit(e, form, 'POST', showAllManages);
+    });
+</script>

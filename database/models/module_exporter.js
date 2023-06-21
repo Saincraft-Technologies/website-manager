@@ -44,7 +44,9 @@ const packages = require("./tours/packages");
 const attractions = require("./tours/attractions");
 const newsletters = require("./tours/newsletters");
 const bookings = require("./tours/bookings");
+const accounts = require("./systems/accounts");
 module.exports = {
+    accounts,
     packages,
     attractions,
     newsletters,

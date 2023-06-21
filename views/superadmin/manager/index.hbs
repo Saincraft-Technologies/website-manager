@@ -4,10 +4,15 @@
             <div class="card-body">
                 <h4 class="page-title">
                     <i class="{{menuIcon}} title_icon"></i> {{models}}
-                    <button type="button" class="btn btn-outline-info btn-rounded alignToTitle"
-                        onclick="largeModal('/backend{{creator}}', 'create {{model}}', 'mdi mdi-plus text-info')"> <i
-                            class="mdi mdi-plus"></i>
+                    <button type="button" class="btn btn-outline-info btn-rounded alignToTitle" onclick="largeModal('/backend{{creator}}', {{#ifEquals model 'payment'}}
+                        'receive {{model}}'
+                        {{else}}'create {{model}}'
+                        {{/ifEquals}}, 'mdi mdi-plus text-info')"> <i class="mdi mdi-plus"></i>
+                        {{#ifEquals model 'payment'}}
+                        receive {{model}}
+                        {{else}}
                         add {{model}}
+                        {{/ifEquals}}
                     </button>
                 </h4>
             </div> <!-- end card body-->
@@ -24,6 +29,8 @@
     </div>
 </div>
 <!-- modyfy section -->
+<link href="{{{cdn 'public'}}}/css/vendor/dataTables.bootstrap4.css" rel="stylesheet" type="text/css" />
+<link href="{{{cdn 'public'}}}/css/vendor/responsive.bootstrap4.css" rel="stylesheet" type="text/css" />
 <script>
     $('document').ready(function () {
         showAllManages();
@@ -33,7 +40,11 @@
             url: '/backend/{{listRoute}}?{{relationQuery}}',
             success: function (response) {
                 $('.{{_model}}_content').html(response);
-                initDataTable('basic-datatable');
+                try {
+                    initDataTable('basic-datatable');
+                } catch (err) {
+                    console.log(err);
+                }
             }
         });
     }
@@ -46,7 +57,7 @@
         $.ajax({
             type: 'POST',
             url: 'backend/{{viewManager.role.role}}/{{models}}/visibility',
-            data: {menuId: menuId.toString(), roleId: roleId.toString() },
+            data: { menuId: menuId.toString(), roleId: roleId.toString() },
             success: function (response) {
                 if (response.status) {
                     toastr.success(response.notification);

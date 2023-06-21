@@ -9,37 +9,55 @@
                 <input type="text" placeholder="receipt" value="{{payment.receipt}}" class="form-control" id="receipt"
                     name="receipt" required>
                 <small id="" class="form-text text-muted">
-                    provide receipt should be small letter & no space. Since it is used to create routes.
+                    provide receipt.
                 </small>
             </div>
             <div class="form-group col-md-6">
-                <label for="title">
-                    title
+                <label for="amount">
+                    amount
                 </label>
-                <input type="text" placeholder="title" value="{{payment.title}}" class="form-control" id="title"
-                    name="title" required>
+                <input type="number" min="0" placeholder="amount" {{#if payment}}value="{{payment.amount}}"
+                    {{else}}value="0" {{/if}} class="form-control" id="amount" name="amount" required>
                 <small id="" class="form-text text-muted">
-                    provide payment title
+                    provide payment amount
                 </small>
             </div>
             <div class="form-group col-md-6">
-                <label for="caption">
-                    caption
+                <label for="websiteId">
+                    website
                 </label>
-                <textarea placeholder="caption .." class="form-control" id="caption" name="caption"
-                    required>{{payment.caption}}</textarea>
+                <select type="text" placeholder="websiteId" value="{{usage.websiteId}}" class="form-control"
+                    id="website" name="websiteId" required>
+                    <option value="">select website</option>
+                    {{#each websites}}
+                    {{#ifEquals id ../payment.websiteId}}
+                    <option value="{{id}}" selected>{{owner}}</option>
+                    {{else}}
+                    <option value="{{id}}">{{owner}}</option>
+                    {{/ifEquals}}
+                    {{/each}}
+                </select>
                 <small id="" class="form-text text-muted">
-                    provide caption
+                    provide usage website
                 </small>
             </div>
+
             <div class="form-group col-md-6">
-                <label for="description">
-                    description
+                <label for="accountId">
+                    account
                 </label>
-                <textarea placeholder="description .." class="form-control" id="description"
-                    name="description">{{payment.description}}</textarea>
+                <select type="text" placeholder="account" class="form-control" id="accountId" name="accountId" required>
+                    <option value="">select account</option>
+                    {{#each accounts}}
+                    {{#ifEquals id ../payment.accountId}}
+                    <option value="{{id}}" selected>{{account}}</option>
+                    {{else}}
+                    <option value="{{id}}">{{account}}</option>
+                    {{/ifEquals}}
+                    {{/each}}
+                </select>
                 <small id="" class="form-text text-muted">
-                    provide description
+                    provide account
                 </small>
             </div>
         </div>
@@ -48,9 +66,9 @@
             <div class="form-group mt-2 col-md-6">
                 <button class="btn btn-block btn-info" type="submit">
                     {{#if payment}}
-                    update payment
+                    update received payment
                     {{else}}
-                    create payment
+                    receive payment
                     {{/if}}
                 </button>
             </div>
@@ -64,6 +82,12 @@
 
 <script>
     $(document).ready(function () {
+        $('#accountId').select2({
+            dropdownParent: $('#large-modal')
+        });
+        $('#website').select2({
+            dropdownParent: $('#large-modal')
+        });
     });
 
     $(".ajaxForm").validate({}); // Jquery form validation initialization

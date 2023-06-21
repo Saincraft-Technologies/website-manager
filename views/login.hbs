@@ -51,15 +51,7 @@
                             Sign in </button>
                     </div>
                 </form>
-                <form target="_top" class="form-group mt-4" action="/auth/google" method="GET">
-                    <a href="/auth/signup" style="font-size: 14px;"
-                        class="btn btn-sm btn-outline-secondary mr-2">register
-                    </a>
-                    <button type="submit" class="btn btn-sm btn-outline-secondary"
-                        style="display:flexbox; align-content:space-around;"><span style="vertical-align: middle;
-    align-content: space-around;">Signin with <i class="mdi mdi-google text-danger"></i>oogle</span>
-                    </button>
-                </form>
+               {{>google}}
 
                 <form action="/forgot" method="post" id="forgotForm" style="display: none;">
                     <div class="form-group">
@@ -79,26 +71,6 @@
         </div> <!-- end .align-items-center.d-flex.h-100-->
     </div>
     <!-- end auth-fluid-form-box-->
-
-    <!-- Auth fluid right content -->
-    <div class="row" style="width:100%; margin-top:20%;">
-        {{!-- <h3>WECLOME!</h3> --}}
-        <div class="col-md-2"></div>
-        <div style="width:100%;" class="col-md-8">
-
-            {{!-- <marquee behavior="alternate" style="color: antiquewhite;" direction="left">
-                <h2>This is <span>Sain</span><span style="color:green">craft</span> storekeeper app</h2>
-                <h5>Please login to continue!</h5>
-
-                <h5>If you dont have an account please contact your administrator!</h5>
-                <h5>If you dont have an administrator please contact us on <a
-                        href="mailto:info@saincrafttechnologies.com">info@saincrafttechnologies.com!</a> </h5>
-
-            </marquee> --}}
-        </div>
-        <div class="col-md-2"></div>
-    </div>
-    <!-- end Auth fluid right content -->
 </div>
 
 

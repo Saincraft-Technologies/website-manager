@@ -21,15 +21,7 @@
                 </div>
                 {{/if}}
                 <!-- form -->
-                <form target="_top" class="form-group mt-4" action="/auth/google" method="GET">
-                    <a href="/auth/signin" style="font-size: 15px;" class="btn btn-sm btn-outline-default mr-2"><i
-                            class="mdi mdi-arrow-left"></i> login
-                    </a>
-                    <button type="submit" class="btn btn-sm btn-outline-secondary"
-                        style="display:flexbox; align-content:space-around;"><span style="vertical-align: middle;
-    align-content: space-around;">Signup with <i class="mdi mdi-google text-danger"></i>oogle</span>
-                    </button>
-                </form>
+                {{>google}}
                 <form class="form-wrapper" action="/auth/signup" method="post" id="loginForm">
                     <div class="form-class">
                         <label for="fullname">Fullname</label>
@@ -99,6 +91,3 @@
 </div>
 
 <script src="{{{cdn 'public'}}}/js/auth-reg.js"></script>
-<!-- end auth-fluid-->
-
-<!-- App js -->

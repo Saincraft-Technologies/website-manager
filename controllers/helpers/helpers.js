@@ -1,5 +1,5 @@
 const { Sequelize } = require("sequelize");
-const { pluralize } = require("../controllers/controls/service");
+const { pluralize } = require("../controls/service");
 
 module.exports = {
     menus: async (models) => {
@@ -66,6 +66,15 @@ module.exports = {
                     extra_includes.push(role);
                     extra_headers.push(role.role);
                 });
+
+                break;
+            case 'users':
+                db_query_includes.push({ model: models['contacts'] });
+                db_query_includes.push({ model: models['locales'] });
+                // JSON.parse(JSON.stringify(await models['contacts'].findAll())).map((role) => {
+                //     extra_includes.push(role);
+                //     extra_headers.push(role.role);
+                // });
 
                 break;
 

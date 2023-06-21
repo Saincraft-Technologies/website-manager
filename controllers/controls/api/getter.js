@@ -1,5 +1,6 @@
-const Controllers = require('../controllers/controls/control');
-const { getter } = require('./relationParser');
+
+const Controllers = require('../control');
+const { capitalize, pluralize, singularize, isEmpty } = require('../service');
 /** Saincraft-Api version II 
  *  This code is resposible with querying from db two level of relations from each join 
  *  This code is compatitle with sequelize "^6.29.0" nodels inputs

@@ -10,7 +10,11 @@
                     id="website" name="websiteId" required>
                     <option value="">select website</option>
                     {{#each websites}}
+                    {{#ifEquals id ../bill.websiteId}}
+                    <option value="{{id}}" selected>{{owner}}</option>
+                    {{else}}
                     <option value="{{id}}">{{owner}}</option>
+                    {{/ifEquals}}
                     {{/each}}
                 </select>
                 <small id="" class="form-text text-muted">
@@ -25,7 +29,11 @@
                 <select type="text" placeholder="usage" class="form-control" id="usageId" name="usageId" required>
                     <option value="">select usage</option>
                     {{#each usages}}
-                    <option value="{{id}}">{{usage}}</option>
+                    {{#ifEquals id ../bill.usageId}}
+                    <option value="{{id}}" selected>{{definition}}</option>
+                    {{else}}
+                    <option value="{{id}}">{{definition}}</option>
+                    {{/ifEquals}}
                     {{/each}}
                 </select>
                 <small id="" class="form-text text-muted">
@@ -39,19 +47,24 @@
                 <select type="text" placeholder="charge" class="form-control" id="chargeId" name="chargeId" required>
                     <option value="">select charge</option>
                     {{#each charges}}
+                    {{#ifEquals id ../bill.chargeId}}
+                    <option value="{{id}}" selected>{{charge}}</option>
+                    {{else}}
                     <option value="{{id}}">{{charge}}</option>
+                    {{/ifEquals}}
                     {{/each}}
                 </select>
                 <small id="" class="form-text text-muted">
                     provide charge
                 </small>
             </div>
+            
         </div>
         <div class="form-group row col-md-12">
 
             <div class="form-group mt-2 col-md-6">
                 <button class="btn btn-block btn-info" type="submit">
-                    {{#if page}}
+                    {{#if bill}}
                     update page
                     {{else}}
                     create page
@@ -72,7 +85,7 @@
             dropdownParent: $('#large-modal')
         }); $('#usageId').select2({
             dropdownParent: $('#large-modal')
-        });$('#website').select2({
+        }); $('#website').select2({
             dropdownParent: $('#large-modal')
         });
     });

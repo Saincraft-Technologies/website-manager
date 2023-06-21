@@ -5,13 +5,14 @@ const { Op } = require('../database/mysql');
 const Controllers = require('../controllers/controls/control');
 const { isLoggedIn, hasToken, hasRoles } = require('../passport/passport');
 const { user } = require('../multipart/multerConfig');
-const { menus, normal_query, create_builder, relation_query } = require('./helpers');
 const { singularize, pluralize, isEmpty } = require('../controllers/controls/service');
 const getCreate = require('../controllers/controls/getters/create');
 const create = require('../controllers/controls/posters/create');
 const index = require('../controllers/controls/getters/index');
 const list = require('../controllers/controls/getters/list');
 const update = require('../controllers/controls/posters/update');
+const edit = require('../controllers/controls/getters/edit');
+const { menus } = require('../controllers/helpers/helpers');
 
 router.get('/', isLoggedIn, async (req, res) => {
     const acceptedRoles = ['superadmin', 'admin', 'manager', 'member'];
@@ -31,142 +32,9 @@ router.get('/:role/dashboard', isLoggedIn, async (req, res) => {
     // console.log("passport user", req.session.passport.user);
     res.render(`${req.params.role}/dashboard`, { layout: false, viewManager: req.session.passport.user, applications: data, menus: (await menus(models)).menu_main, sub_menu: (await menus(models)).sub_menu })
 });
-router.get('/:role/:model/index', isLoggedIn, async (req, res) => {
-    /** model is the database model and the frontend handler for querying */
-    let model = (req.params.model.includes('_')) ? singularize(req.params.model).replace('_', ' ') : singularize(req.params.model);
+router.get('/:role/:model/index', isLoggedIn, index);
 
-    console.log('model singular and plural', req.url);
-    // console.log(isEmpty(req.query));
-    const control = await new Controllers(req);
-    let menuIcon = await control.single('menus', { where: { route_name: req.url.split(req.params.role)[1] } });
-    /** pretify the model name remove underscore if present */
-    let models = (req.params.model.includes('_')) ? req.params.model.replace('_', ' ') : req.params.model;
-    let relationQuery = '';
-    let queries = req.query;
-
-
-    var listRoute = `${req.session.passport.user.role.role}/${req.params.model}/list`
-
-    if (!isEmpty(req.query)) {
-        if (req.query['rel0']) {
-            let creator = `/${req.params.role}/${req.params.model}/create`;
-            console.log('before running');
-            res.render(`${req.params.role}/manager/index`, { layout: false, viewManager: req.session.passport.user, listRoute: listRoute, menuIcon: menuIcon.icon, model: model, _model: req.params.model, models: models, relationQuery: relationQuery, creator: creator })
-        } else {
-            console.log(relationQuery.split('=')[0]);
-            console.log('relation queries', model);
-            let creator = `/${req.params.role}/${req.params.model}/create`
-            res.render(`${req.params.role}/manager/index`, { layout: false, viewManager: req.session.passport.user, listRoute: listRoute, menuIcon: menuIcon.icon, model: model, _model: req.params.model, models: models, relationQuery: relationQuery, creator: creator })
-        }
-    } else {
-        console.log('am here');
-        let creator = `/${req.params.role}/${req.params.model}/create`
-        res.render(`${req.params.role}/manager/index`, { layout: false, viewManager: req.session.passport.user, listRoute: listRoute, menuIcon: menuIcon.icon, model: model, _model: req.params.model, models: models, relationQuery: relationQuery, creator: creator })
-    }
-});
-
-router.get('/:role/:model/list', isLoggedIn, async (req, res) => {
-    const control = new Controllers(req);
-    console.log(req.query)
-    /** other queries */
-    let listHeaders = [];
-    let entry = null;
-    let update = null;
-    let deleted = null;
-
-    let list = await control.find(req.params.model, {});
-
-    list.map((item, i) => {
-        if (i == 0) {
-            for (const header in item) {
-                if (header != 'deletedAt' && header != 'createdAt' && header != 'id') {
-                    if (!header.endsWith('Id')) {
-                        if (header.endsWith('At')) {
-                            (header == 'updatedAt') ? update = { head: 'updated date' } : null;
-                            (header == 'createdAt') ? entry = { head: 'entry date' } : null;
-                            (header == 'deletedAt') ? deleted = { head: 'deleted date' } : null;
-
-                        } else {
-                            listHeaders.push({ head: (header.includes('_')) ? header.replace('_', ' ') : header });
-                        }
-                    } else {
-                        listHeaders.push({ head: header.split('Id')[0] });
-                    }
-                }
-            }
-        }
-    });
-    (entry) ?
-        listHeaders.push(entry) : null;
-    (update) ?
-        listHeaders.push(update) : null;
-    (deleted) ?
-        listHeaders.push(deleted) : null;
-    var param = [{ layout: false, route: `${req.session.passport.user.role.role}/${req.params.model}`, model: singularize(req.params.model) }];
-
-    switch (req.params.model) {
-        case 'menus':
-            var normal = await relation_query(req, models);
-            break;
-        default:
-            var normal = await normal_query(req, models);
-            break;
-    }
-    console.log('AM +++++=====>>>>', normal[2])
-    if (isEmpty(req.query)) {
-        /** works! */
-        let list = await control.find(req.params.model, { include: await normal[0] });
-        param[0][req.params.model] = list;
-        for (const head of normal[1]) {
-            console.log(head);
-            listHeaders.push({ head: head });
-        }
-
-        param[0]['headers'] = listHeaders;
-
-        switch (req.params.model) {
-            case 'menus':
-                param[0]['roles'] = await normal[2];
-                break;
-            default:
-                break;
-        }
-        console.log(...param);
-        res.render(`${req.session.passport.user.role.role}/${req.params.model}/list`, ...param);
-    } else {
-        /** works without related models */
-        let params = req.query;
-        param[0]['layout'] = false;
-        param[0]['headers'] = listHeaders;
-        let list = await control.find(req.params.model, {});
-        param[0][req.params.model] = await list;
-        try {
-
-            var roles = await control.find('roles');
-            param[0]['roles'] = await roles;
-            for (const pr in params) {
-                console.log('prrrr=======>>>>>', param);
-                param[0][params[pr]] = await control.find(params[pr]);
-            }
-        } catch (error) {
-            switch (req.params.model) {
-                case 'menus':
-                    var roles = await control.find('roles');
-                    param[0]['roles'] = await roles;
-                    res.render(`${req.session.passport.user.role.role}/${req.params.model}/list`, ...param);
-                    break;
-
-                default:
-                    var roles = await control.find('roles');
-                    param.push({ 'roles': await roles });
-                    res.render(`${req.session.passport.user.role.role}/${req.params.model}/list`, ...param);
-                    console.log(error.message);
-                    break;
-            };
-        }
-        console.log(...param);
-    }
-});
+router.get('/:role/:model/list', isLoggedIn, list);
 
 router.get('/:role/:model/deleted', isLoggedIn, async (req, res) => {
     const control = new Controllers(req);
@@ -270,105 +138,10 @@ router.get('/:role/:model/deleted', isLoggedIn, async (req, res) => {
         console.log(...param);
     }
 });
-router.get('/:role/:model/create', isLoggedIn, async (req, res) => {
-    const control = new Controllers(req);
-    let params = [{ layout: false }];
-    if (isEmpty(req.query)) {
-        if (req.params.model.includes('_')) {
-            let normal = await create_builder(req);
-            for (const norm of normal) {
-                console.log('norm =====>>>>>', norm.model);
-                params[0][norm] = await (await control.find(`${norm}`, {}));
-                console.log('norm =====>>>>>', ...params);
-            }
-            params[0]['action'] = `/backend/${req.params.role}/${req.params.model}/create`;
-            console.log(...params);
-            res.render(`${req.params.role}/${req.params.model}/create`, ...params);
-        } else {
-            switch (req.params.model) {
-                case 'menus':
-                    params[0]['parents'] = await control.find('menus', { where: { parent: 0 } });
-                    console.log('my menu parents ===>>>>', params);
-                    break;
-                case 'contents':
-                    params[0]['pages'] = await control.find('pages', {});
-                    console.log('my menu parents ===>>>>', params);
-                    break;
-                case 'members':
-                    params[0]['teams'] = await control.find('teams', {});
-                    console.log('my team parents ===>>>>', params);
-                    break;
-                case 'usages':
-                    params[0]['websites'] = await control.find('websites', {});
-                    console.log('my team parents ===>>>>', params);
-                    break;
-                case 'bills':
-                    params[0]['websites'] = await control.find('websites', {});
-                    params[0]['charges'] = await control.find('charges', {});
-                    params[0]['usages'] = await control.find('usages', {});
-                    console.log('my team parents ===>>>>', params);
-                    break;
-                default:
-                    break;
-            }
-            params[0]['action'] = `/backend/${req.params.role}/${req.params.model}/create`;
-            console.log(...params);
-            res.render(`${req.params.role}/${req.params.model}/create`, ...params);
-        }
-
-    } else {
-        params[0]['action'] = `/backend/${req.params.role}/${req.params.model}/create`;
-        res.render(`${req.params.role}/${req.params.model}/create`, { layout: false });
-    }
-
-})
+router.get('/:role/:model/create', isLoggedIn, getCreate);
 router.post('/:role/:model/create', isLoggedIn, user().any(), create);
 
-router.get('/:role/:model/edit/:id', isLoggedIn, async (req, res) => {
-    const control = new Controllers(req);
-    let params = [{ layout: false }];
-    if (isEmpty(req.query)) {
-        if (req.params.model.includes('_')) {
-            let normal = await create_builder(req);
-            for (const norm of normal) {
-                console.log('norm =====>>>>>', norm.model);
-                params[0][norm] = await (await control.find(`${norm}`, {}));
-                console.log('norm =====>>>>>', ...params);
-            }
-            params[0][singularize(req.params.model)] = await (await control.single(`${req.params.model}`, { where: { id: req.params.id } }))
-            params[0]['action'] = `/backend/${req.params.role}/${req.params.model}/edit/` + req.params.id;
-            console.log(...params);
-            res.render(`${req.params.role}/${req.params.model}/create`, ...params);
-        } else {
-            switch (req.params.model) {
-                case 'menus':
-                    params[0]['parents'] = await control.find('menus', { where: { parent: 0 } });
-                    console.log('my menu parents ===>>>>', params);
-                    break;
-                case 'contents':
-                    params[0]['pages'] = await control.find('pages', {});
-                    break;
-
-                case 'members':
-                    /** teams where website id  ====> */
-                    params[0]['teams'] = await control.find('teams', {});
-                    break;
-
-                default:
-                    break;
-            }
-            params[0]['action'] = `/backend/${req.params.role}/${req.params.model}/edit/` + req.params.id;
-            params[0][singularize(req.params.model)] = await control.single(req.params.model, { where: { id: req.params.id } })
-            console.log(...params);
-            res.render(`${req.params.role}/${req.params.model}/create`, ...params);
-        }
-
-    } else {
-        params[0]['action'] = `/backend/${req.params.role}/${req.params.model}/edit/` + req.params.id;
-        res.render(`${req.params.role}/${req.params.model}/create/`, { layout: false });
-    }
-
-});
+router.get('/:role/:model/edit/:id', isLoggedIn,edit);
 
 router.post('/:role/:model/edit/:id', isLoggedIn, user().any(), update);
 

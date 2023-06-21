@@ -14,17 +14,22 @@
     <tbody>
         {{#each bills}}
         <tr>
-            <td>{{setHomeDate updatedAt}}</td>
+            <td><strong style="text-decoration: underline;">charges for</strong><br>{{charge.charge}}<br>
+                <strong style="text-decoration: underline;">details</strong><br>{{usage.definition}}
+            </td>
 
-            <td>{{charge.charge}}<br>
-                {{money charge.amount}} / {{charge.duration}}
+            <td>
+                {{money charge.amount}} / {{charge.duration}}<br>
+                days:{{totalDays}}<br>
+                total: {{totalCharges}}
             </td>
-            <td>{{usage.definition}}
+            <td>{{website.dns}}<br>
+            <strong>Site for:</strong> {{website.owner}}
             </td>
-            <td><strong>Site for:</strong> {{website.owner}}<br>
+            <td>{{session.year}}<br>
             </td>
-            <td></td>
-            <td></td>
+            <td>{{user.name}}</td>
+            <td>{{setHomeDate updatedAt}}</td>
             <td>
                 <div class="dropdown text-center">
                     <button type="button"
