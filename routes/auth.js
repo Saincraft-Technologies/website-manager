@@ -24,7 +24,14 @@ router.get('/signup', notLoggedIn, async (req, res) => {
         locale: 'en',
     })
 });
-
+router.get('/google',
+  passport.authenticate('google', { scope: [ 'email', 'profile' ]
+}));
+router.get('/google/callback', passport.authenticate( 'google', {
+   successRedirect: '/',
+   failureRedirect: '/auth/signin',
+   failureFlash: true
+}));
 router.post('/signin', passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/auth/signin',

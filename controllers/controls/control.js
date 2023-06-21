@@ -25,7 +25,7 @@ class Controllers extends Session {
     async find(model, opt) {
         let t = await this.authorize();
         if (t) {
-            console.log('tina', model);
+            // console.log('tina', model);
             return JSON.parse(JSON.stringify(await models[model].findAll(opt)));
         } else {
             throw new Error('unauthorized!');

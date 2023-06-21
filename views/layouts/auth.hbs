@@ -16,48 +16,13 @@
     {{else}}
     <link href="{{{cdn 'public'}}}/css/app.min.css" rel="stylesheet" type="text/css" />
     {{/ifEquals}}
-    <!--Notify for ajax-->
-    <link rel="stylesheet" href="{{{cdn 'public'}}}/css/toastr.min.css">
+    <script src="{{{cdn 'public'}}}/js/jquery-3.6.0.js"></script>
 
 </head>
 
 <body data-layout="detached">
     {{{body}}}
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            initSelect2(["#language-list"]);
-        });
-        function getLanguageList() {
-            $.ajax({
-                url: "/translate/language/auth/list",
-                success: function (response) {
-                    console.log(response);
-                    $('#language-list').html(response);
-                }
-            });
-        }
-        {{!-- getInLanguageList(); --}}
-        function changeLanguage() {
-            let code = $('#language-list').val();
-            $.ajax({
-                url: "/translate/language/change/" + code,
-                success: (data) => {
-                    if (data.status) {
-                        location.reload();
-                    }
-                }
-            });
-        }
-    </script>
-
-    {{> include_bottom}}
-    <!-- bundle -->
-
     <script src="{{{cdn 'public'}}}/js/app.min.js"></script>
-
-    <!--Notify for ajax-->
-    <script src="{{{cdn 'public'}}}/js/toastr.min.js"></script>
 </body>
 
 </html>

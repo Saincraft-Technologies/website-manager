@@ -82,8 +82,6 @@
                     site_visibility 1}} checked{{/ifEquals}} disabled>
                 <label for="site_visibility" data-on-label="Yes" data-off-label="No"></label>
             </td>
-            <td>{{setHomeDate updatedAt}}
-            </td>
             <td>{{team.team}}
             </td>
             <td class="flex-box" style="word-wrap: break-word;">
@@ -98,6 +96,8 @@
                 <a href="{{upload.path}}" target="_blank">
                     view file
                 </a>
+            </td>
+            <td>{{setHomeDate updatedAt}}
             </td>
             <td>
                 <div class="dropdown text-center">

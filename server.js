@@ -6,8 +6,9 @@ const express = require('express');
 const { engine } = require('express-handlebars');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const flash = require('express-flash');
-const { passportInit, authenticateUser } = require('./passport/passport');
+const { passportInit, authenticateUser, authUser } = require('./passport/passport');
 // const LocalStrategy = require('passport-local').Strategy;
 const app = require('./applications/app');
 
@@ -38,28 +39,22 @@ passport.use(new LocalStrategy(
         passReqToCallback: true
     },
     authenticateUser));
+    
+passport.use(new GoogleStrategy({
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: `http://localhost:${process.env.PORT}/auth/google/callback`,
+    passReqToCallback: true
+}, authUser));
 
 passport.serializeUser(function (user, done) {
     return done(null, user);
 });
+
 passport.deserializeUser(function (user, done) {
     // console.log('am deserializing', user.id);
     try {
-        return models.contacts.findOne({ where: { email: user.email }, include: [{ model: models.users, include: [{ model: models.role_permissions, include: [{ model: models.roles }] }, { model: models.locales }, { model: models.uploads }] }, { model: models.authentications }] }).then(contact => {
-            let _contact = JSON.parse(JSON.stringify(contact));
-            let _user = _contact.users[0];
-            let userData = {
-                id: _user.id,
-                name: _user.name,
-                email: _user.email,
-                role: _user.role_permissions[0].role,
-                userId: _user.id,
-                language: _user.locale[0],
-                avatar: (_user.upload) ? _user.upload.path : null,
-            }
-            http.globalAgent = { language: _user.locale[0] };
-            return done(null, userData);
-        });
+        return done(null, user);
     } catch (err) {
         return done(err)
     }

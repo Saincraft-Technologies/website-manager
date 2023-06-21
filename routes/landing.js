@@ -7,7 +7,11 @@ const { isLoggedIn, hasToken, hasRoles } = require('../passport/passport');
 const { user } = require('../multipart/multerConfig');
 const { menus, normal_query, create_builder, relation_query } = require('./helpers');
 const { singularize, pluralize, isEmpty } = require('../controllers/controls/service');
-const fs = require('fs');
+const getCreate = require('../controllers/controls/getters/create');
+const create = require('../controllers/controls/posters/create');
+const index = require('../controllers/controls/getters/index');
+const list = require('../controllers/controls/getters/list');
+const update = require('../controllers/controls/posters/update');
 
 router.get('/', isLoggedIn, async (req, res) => {
     const acceptedRoles = ['superadmin', 'admin', 'manager', 'member'];
@@ -66,6 +70,9 @@ router.get('/:role/:model/list', isLoggedIn, async (req, res) => {
     console.log(req.query)
     /** other queries */
     let listHeaders = [];
+    let entry = null;
+    let update = null;
+    let deleted = null;
 
     let list = await control.find(req.params.model, {});
 
@@ -75,7 +82,10 @@ router.get('/:role/:model/list', isLoggedIn, async (req, res) => {
                 if (header != 'deletedAt' && header != 'createdAt' && header != 'id') {
                     if (!header.endsWith('Id')) {
                         if (header.endsWith('At')) {
-                            listHeaders.push({ head: 'date' });
+                            (header == 'updatedAt') ? update = { head: 'updated date' } : null;
+                            (header == 'createdAt') ? entry = { head: 'entry date' } : null;
+                            (header == 'deletedAt') ? deleted = { head: 'deleted date' } : null;
+
                         } else {
                             listHeaders.push({ head: (header.includes('_')) ? header.replace('_', ' ') : header });
                         }
@@ -86,7 +96,115 @@ router.get('/:role/:model/list', isLoggedIn, async (req, res) => {
             }
         }
     });
+    (entry) ?
+        listHeaders.push(entry) : null;
+    (update) ?
+        listHeaders.push(update) : null;
+    (deleted) ?
+        listHeaders.push(deleted) : null;
+    var param = [{ layout: false, route: `${req.session.passport.user.role.role}/${req.params.model}`, model: singularize(req.params.model) }];
 
+    switch (req.params.model) {
+        case 'menus':
+            var normal = await relation_query(req, models);
+            break;
+        default:
+            var normal = await normal_query(req, models);
+            break;
+    }
+    console.log('AM +++++=====>>>>', normal[2])
+    if (isEmpty(req.query)) {
+        /** works! */
+        let list = await control.find(req.params.model, { include: await normal[0] });
+        param[0][req.params.model] = list;
+        for (const head of normal[1]) {
+            console.log(head);
+            listHeaders.push({ head: head });
+        }
+
+        param[0]['headers'] = listHeaders;
+
+        switch (req.params.model) {
+            case 'menus':
+                param[0]['roles'] = await normal[2];
+                break;
+            default:
+                break;
+        }
+        console.log(...param);
+        res.render(`${req.session.passport.user.role.role}/${req.params.model}/list`, ...param);
+    } else {
+        /** works without related models */
+        let params = req.query;
+        param[0]['layout'] = false;
+        param[0]['headers'] = listHeaders;
+        let list = await control.find(req.params.model, {});
+        param[0][req.params.model] = await list;
+        try {
+
+            var roles = await control.find('roles');
+            param[0]['roles'] = await roles;
+            for (const pr in params) {
+                console.log('prrrr=======>>>>>', param);
+                param[0][params[pr]] = await control.find(params[pr]);
+            }
+        } catch (error) {
+            switch (req.params.model) {
+                case 'menus':
+                    var roles = await control.find('roles');
+                    param[0]['roles'] = await roles;
+                    res.render(`${req.session.passport.user.role.role}/${req.params.model}/list`, ...param);
+                    break;
+
+                default:
+                    var roles = await control.find('roles');
+                    param.push({ 'roles': await roles });
+                    res.render(`${req.session.passport.user.role.role}/${req.params.model}/list`, ...param);
+                    console.log(error.message);
+                    break;
+            };
+        }
+        console.log(...param);
+    }
+});
+
+router.get('/:role/:model/deleted', isLoggedIn, async (req, res) => {
+    const control = new Controllers(req);
+    console.log(req.query)
+    /** other queries */
+    let listHeaders = [];
+    let entry = null;
+    let update = null;
+    let deleted = null;
+
+    let list = await control.find(req.params.model, {});
+
+    list.map((item, i) => {
+        if (i == 0) {
+            for (const header in item) {
+                if (header != 'updatedAt' && header != 'id') {
+                    if (!header.endsWith('Id')) {
+                        if (header.endsWith('At')) {
+                            (header == 'updatedAt') ? update = { head: 'updated date' } : null;
+                            (header == 'createdAt') ? entry = { head: 'entry date' } : null;
+                            (header == 'deletedAt') ? deleted = { head: 'deleted date' } : null;
+
+                        } else {
+                            listHeaders.push({ head: (header.includes('_')) ? header.replace('_', ' ') : header });
+                        }
+                    } else {
+                        listHeaders.push({ head: header.split('Id')[0] });
+                    }
+                }
+            }
+        }
+    });
+    (entry) ?
+        listHeaders.push(entry) : null;
+    (update) ?
+        listHeaders.push(update) : null;
+    (deleted) ?
+        listHeaders.push(deleted) : null;
     var param = [{ layout: false, route: `${req.session.passport.user.role.role}/${req.params.model}`, model: singularize(req.params.model) }];
 
     switch (req.params.model) {
@@ -204,41 +322,7 @@ router.get('/:role/:model/create', isLoggedIn, async (req, res) => {
     }
 
 })
-router.post('/:role/:model/create', isLoggedIn, user().any(), async (req, res) => {
-
-    const control = new Controllers(req);
-    console.log('requested body', req.body);
-    try {
-        switch (req.params.model) {
-            case 'applications':
-                // let data = req.body;
-                data['userId'] = req.session.passport.user.id;
-                data['code'] = Math.round(Math.random() * 1000000);
-                // console.log(data);
-                // let newData = await control.create('applications', req.body);
-                // console.log('==========>>>>>>>', newData)
-                res.status(200).json({ status: true, notification: 'successfully added!', data: await newData });
-                break;
-            case 'users':
-
-                break;
-            default:
-                if (req.params.model.includes('_')) {
-
-                    return res.status(200).json({ status: true, notification: 'successfully added ' + (req.params.model.replace('_', ' ')), data: await control.create(req.params.model, req.body) });
-                    break;
-                }
-                res.status(200).json({ status: true, notification: 'successfully added ' + req.params.model, data: await control.create(req.params.model, req.body) });
-                break;
-        }
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ status: false, notification: 'error' + error.message })
-    }
-    // let data = await (await control.create('applications', req.body));
-    // console.log(await data);
-    // res.render('dashboard', { layout: false, applications: data })
-});
+router.post('/:role/:model/create', isLoggedIn, user().any(), create);
 
 router.get('/:role/:model/edit/:id', isLoggedIn, async (req, res) => {
     const control = new Controllers(req);
@@ -286,40 +370,7 @@ router.get('/:role/:model/edit/:id', isLoggedIn, async (req, res) => {
 
 });
 
-router.post('/:role/:model/edit/:id', isLoggedIn, user().any(), async (req, res) => {
-
-    const control = new Controllers(req);
-    console.log('requested body', req.body);
-    try {
-        switch (req.params.model) {
-            case 'applications':
-                // let data = req.body;
-                data['userId'] = req.session.passport.user.id;
-                data['code'] = Math.round(Math.random() * 1000000);
-                // console.log(data);
-                // let newData = await control.create('applications', req.body);
-                // console.log('==========>>>>>>>', newData)
-                res.status(200).json({ status: true, notification: 'successfully updated!', data: await newData });
-                break;
-            case 'users':
-
-                break;
-            default:
-                if (req.params.model.includes('_')) {
-
-                    return res.status(200).json({ status: true, notification: 'successfully updated ' + (req.params.model.replace('_', ' ')), data: await control.update(req.params.model, req.body, { where: { id: req.params.id } }) });
-                    break;
-                }
-                res.status(200).json({ status: true, notification: 'successfully updated ' + req.params.model, data: await control.update(req.params.model, req.body, { where: { id: req.params.id } }) });
-                break;
-        }
-    } catch (error) {
-        res.status(500).json({ status: false, notification: 'error' + error.message })
-    }
-    // let data = await (await control.create('applications', req.body));
-    // console.log(await data);
-    // res.render('dashboard', { layout: false, applications: data })
-});
+router.post('/:role/:model/edit/:id', isLoggedIn, user().any(), update);
 
 router.get('/:role/:model/upload/:id', isLoggedIn, async (req, res) => {
     const control = new Controllers(req);

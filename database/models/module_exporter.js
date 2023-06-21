@@ -40,8 +40,15 @@ const methods = require("./systems/methods");
 const sessions = require("./systems/sessions");
 const usages = require("./systems/usages");
 const payments = require("./systems/payments");
+const packages = require("./tours/packages");
+const attractions = require("./tours/attractions");
+const newsletters = require("./tours/newsletters");
+const bookings = require("./tours/bookings");
 module.exports = {
-
+    packages,
+    attractions,
+    newsletters,
+    bookings,
     bills,
     charges,
     methods,

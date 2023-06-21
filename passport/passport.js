@@ -63,6 +63,59 @@ module.exports = {
             });
         }
     },
+    authUser: async (request, accessToken, refreshToken, profile, done) => {
+        try {
+            console.log('profile===>>', profile);
+
+            // console.log(await contact_authentications.findAll({ where: { id: { email: email } }, include: { model: contacts, include: { model: users } } }));
+            const contact = JSON.parse(JSON.stringify(await models.contacts.findOne({ where: { email: await profile.email }, include: [{ model: models.authentications }, { model: models.users, include: [{ model: models.role_permissions, include: [{ model: models.roles }] }, { model: models.locales }, { model: models.uploads }] }] })));
+            console.log(await contact);
+            // const session = JSON.parse(JSON.stringify(await models.financials.findOne({ where: { active: 1 } })));
+            // const _user = JSON.parse(JSON.stringify(await user))[0];
+
+            if (contact.users.length <= 0) {
+                return done(null, false, { message: 'user do not exist!' });
+            }
+            const _user = await contact.users[0];
+            if (_user.role_permissions.length > 0) {
+                console.log(_user.role_permissions[0]);
+                if (!_user.role_permissions[0].role) {
+                    return done(null, false, {
+                        message: 'User dont have role!'
+                    });
+                } else {
+                    let auth = JSON.parse(JSON.stringify(await models['websites'].findAll({ where: { key: process.env.D_API_KEY } })));
+                    let userData = {
+                        id: _user.id,
+                        provider:profile.provider,
+                        sub:profile.sub,
+                        auth_id:profile.id,
+                        displayName:profile.displayName,
+                        name: _user.name,
+                        email: contact.email,
+                        photo:profile.photos[0].value,
+                        picture:profile.picture,
+                        role: _user.role_permissions[0].role,
+                        userId: _user.id,
+                        website: auth[0].dns,
+                        owner: auth[0].owner,
+                        language: _user.locale,
+                        avatar: (_user.upload) ? _user.upload.path : null,
+                        theme: 'light',
+                        home: (_user.role_permissions[0].role.role.includes('superadmin')) ? '/backend/' + _user.role_permissions[0].role.role : (_user.role_permissions[0].role.role == 'admin') ? '/admin' : (_user.role_permissions[0].role.role.includes('dealer')) ? '/dealer' : (_user.role_permissions[0].role.role.includes('business')) ? '/business' : (_user.role_permissions[0].role.role.includes('warehouse')) ? '/warehouse' : (_user.role_permissions[0].role.role.includes('store')) ? '/store' : '/',
+                    }
+                    global.language = _user.locale[0];
+                    console.log(userData);
+                    return done(null, userData);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            return done(null, false, {
+                message: 'error while loginin! ' + error.message
+            });
+        }
+    },
     isLoggedIn: async (req, res, next) => {
         try {
             if (req.isAuthenticated()) {
@@ -163,6 +216,7 @@ module.exports = {
     },
     hasRoles: async (rolesArray, req) => {
         if (!rolesArray.length <= 0) {
+            console.log(req.session.passport);
             return (rolesArray.includes(req.session.passport.user.role.role)) ? true : false;
         } else {
             return false;

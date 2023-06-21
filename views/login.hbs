@@ -22,25 +22,43 @@
                 </div>
                 {{/if}}
                 <!-- form -->
-                <form action="/auth/signin" method="post" id="loginForm">
-                    <div class="form-group">
+                <form class="form-wrapper" action="/auth/signin" method="post" id="loginForm">
+                    <div class="form-class">
                         <label for="emailaddress">email</label>
-                        <input class="form-control" type="email" name="email" id="emailaddress" required=""
-                            placeholder="enter your email">
+                        <p class="input-group">
+                            <input class="form-control" type="email" name="email" id="emailaddress" required=""
+                                placeholder="enter your email">
+                            <span class="input-group-text">
+                                <i class="mdi mdi-account" aria-hidden="true"></i>
+                            </span>
+                        </p>
                     </div>
-                    <div class="form-group">
-                        <a href="/auth/recovery"  class="text-muted float-right"><small>forgot password</small></a>
+                    <div class="form-class">
+                        <a href="/auth/recovery" class="text-muted float-right"><small>forgot password</small></a>
                         <label for="password">password</label>
-                        <input class="form-control" type="password" name="password" required="" id="password"
-                            placeholder=" enter your password">
+                        <p class="input-group">
+                            <input class="form-control" type="password" name="password" required id="password"
+                                placeholder=" enter your password" type="password" size="30" aria-required="false">
+                            <span class="input-group-text" role="button" style="cursor: pointer;" title="veiw password"
+                                id="passBtn">
+                                <i class="mdi mdi-eye-outline" aria-hidden="true"></i>
+                            </span>
+                        </p>
                         <span class="text-danger" id="error_message"></span>
                     </div>
                     <div class="form-group mb-0 text-center">
-                        <button class="btn btn-primary btn-block" type="submit"><i class="mdi mdi-login"></i>
+                        <button class="btn btn-info btn-block" type="submit"><i class="mdi mdi-login"></i>
                             Sign in </button>
-                        <a href="/auth/signup" class="text-muted float-left" style="float: left;"><small> register?
-                            </small></a>
                     </div>
+                </form>
+                <form target="_top" class="form-group mt-4" action="/auth/google" method="GET">
+                    <a href="/auth/signup" style="font-size: 14px;"
+                        class="btn btn-sm btn-outline-secondary mr-2">register
+                    </a>
+                    <button type="submit" class="btn btn-sm btn-outline-secondary"
+                        style="display:flexbox; align-content:space-around;"><span style="vertical-align: middle;
+    align-content: space-around;">Signin with <i class="mdi mdi-google text-danger"></i>oogle</span>
+                    </button>
                 </form>
 
                 <form action="/forgot" method="post" id="forgotForm" style="display: none;">
@@ -83,33 +101,8 @@
     <!-- end Auth fluid right content -->
 </div>
 
-<script src="{{{cdn 'public'}}}/js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        initSelect2(["#language-list"]);
-    });
-    function getLanguageList() {
-        $.ajax({
-            url: "/translate/language/auth/list",
-            success: function (response) {
-                console.log(response);
-                $('#language-list').html(response);
-            }
-        });
-    }
-    {{!-- getLanguageList(); --}}
-    function changeLanguage() {
-        let code = $('#language-list').val();
-        $.ajax({
-            url: "/translate/language/change/" + code,
-            success: (data) => {
-                if (data.status) {
-                    location.reload();
-                }
-            }
-        });
-    }
-</script>
+
+<script src="{{{cdn 'public'}}}/js/auth-reg.js"></script>
 <!-- end auth-fluid-->
 
 <!-- App js -->
