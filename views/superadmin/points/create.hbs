@@ -2,6 +2,7 @@
 <form method="POST" class="d-block ajaxForm" action="{{action}}">
     <div class="form-row">
         <div class="form-group row col-md-12">
+
             <div class="form-group col-md-6">
                 <label for="attraction">
                     attraction
@@ -12,16 +13,7 @@
                     provide attraction attraction
                 </small>
             </div>
-            <div class="form-group col-md-6">
-                <label for="descriptions">
-                    descriptions
-                </label>
-                <input type="text" placeholder="descriptions name" value="{{attraction.descriptions}}"
-                    class="form-control" id="descriptions" name="descriptions" required>
-                <small id="" class="form-text text-muted">
-                    provide descriptions
-                </small>
-            </div>
+
             <div class="form-group col-md-6">
                 <label for="websiteId">
                     select website
@@ -30,9 +22,9 @@
                     <option value="" selected>select website</option>
                     {{#each websites}}
                     {{#ifEquals id ../attraction.websiteId}}
-                    <option value="{{id}}" selected>{{owner}}</option>
+                    <option value="{{id}}" selected>{{provider}} {{website}}</option>
                     {{else}}
-                    <option value="{{id}}">{{owner}}</option>
+                    <option value="{{id}}">{{provider}} {{website}}</option>
                     {{/ifEquals}}
                     {{/each}}
                 </select>

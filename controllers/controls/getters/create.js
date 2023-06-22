@@ -48,6 +48,14 @@ module.exports = async (req, res, next) => {
                     params[0]['websites'] = await control.find('websites', {});
                     console.log('my team parents ===>>>>', params);
                     break;
+                case 'attractions':
+                    params[0]['websites'] = await control.find('websites', {});
+                    console.log('my team parents ===>>>>', params);
+                    break;
+                case 'feedbacks':
+                    params[0]['websites'] = await control.find('websites', {});
+                    console.log('my team parents ===>>>>', params);
+                    break;
                 default:
                     break;
             }

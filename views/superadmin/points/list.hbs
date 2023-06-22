@@ -12,16 +12,19 @@
         </tr>
     </thead>
     <tbody>
-        {{#each attractions}}
+        {{#each bookings}}
         <tr>
-            <td>{{attraction}}
+            <td>{{account}}
             </td>
-            <td>{{descriptions}}
+            <td>{{acc_number}}
             </td>
-            <td>{{website.owner}}
+            <td>{{verified}}
             </td>
-            <td>{{setHomeDate updatedAt}}
+            <td>{{active}}
             </td>
+            <td>{{method.method}}
+            </td>
+            <td>{{setHomeDate updatedAt}}</td>
             <td>
                 <div class="dropdown text-center">
                     <button type="button"

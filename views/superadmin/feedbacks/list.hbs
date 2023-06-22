@@ -12,16 +12,21 @@
         </tr>
     </thead>
     <tbody>
-        {{#each attractions}}
+        {{#each feedbacks}}
         <tr>
-            <td>{{attraction}}
+            <td>{{email}}
             </td>
-            <td>{{descriptions}}
+            <td>{{title}}
+            </td>
+            <td>{{comment}}
+            </td>
+            <td>{{username}}
+            </td>
+            <td>{{subscribe}}
             </td>
             <td>{{website.owner}}
             </td>
-            <td>{{setHomeDate updatedAt}}
-            </td>
+            <td>{{setHomeDate updatedAt}}</td>
             <td>
                 <div class="dropdown text-center">
                     <button type="button"

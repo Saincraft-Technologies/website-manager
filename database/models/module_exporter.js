@@ -42,14 +42,29 @@ const usages = require("./systems/usages");
 const payments = require("./systems/payments");
 const packages = require("./tours/packages");
 const attractions = require("./tours/attractions");
-const newsletters = require("./tours/newsletters");
 const bookings = require("./tours/bookings");
 const accounts = require("./systems/accounts");
+const feedbacks = require("./tours/feedbacks");
+const attraction_galleries = require("./tours/attraction_galleries");
+const galleries = require("./tours/galleries");
+const gallery_uploads = require("./tours/gallery_uploads");
+const points = require("./tours/points");
+const point_galleries = require("./tours/point_galleries");
+const point_provisions = require("./tours/point_provisions");
+const itineraries = require("./tours/itineraries");
+
 module.exports = {
+    attraction_galleries,
+    galleries,
+    gallery_uploads,
+    points,
+    point_galleries,
+    point_provisions,
+    itineraries,
     accounts,
+    feedbacks,
     packages,
     attractions,
-    newsletters,
     bookings,
     bills,
     charges,

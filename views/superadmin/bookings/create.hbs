@@ -2,54 +2,94 @@
 <form method="POST" class="d-block ajaxForm" action="{{action}}">
     <div class="form-row">
         <div class="form-group row col-md-12">
-           
+
             <div class="form-group col-md-6">
-                <label for="account">
-                    account
+                <label for="adults">
+                    adults
                 </label>
-                <input type="text" placeholder="account name" value="{{account.account}}"
-                    class="form-control" id="account" name="account" required>
+                <input type="number" placeholder="adults count" value="{{booking.adults}}" class="form-control"
+                    id="adults" name="adults" required>
                 <small id="" class="form-text text-muted">
-                    provide account account
+                    provide adults number
                 </small>
             </div>
             <div class="form-group col-md-6">
-                <label for="acc_number">
-                    Account number
+                <label for="children">
+                    children
                 </label>
-                <input type="text" placeholder="payment account number" value="{{account.acc_number}}"
-                    class="form-control" id="acc_number" name="acc_number" required>
+                <input type="number" placeholder="children count" value="{{booking.children}}" class="form-control"
+                    id="children" name="children" required>
                 <small id="" class="form-text text-muted">
-                    provide account acc_number
+                    provide children number
+                </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="disabled_adults">
+                    disabled adults
+                </label>
+                <input type="number" placeholder="disabled adults count" value="{{booking.disabled_adults}}"
+                    class="form-control" id="disabled_adults" name="disabled_adults" required>
+                <small id="" class="form-text text-muted">
+                    provide disabled adults number
                 </small>
             </div>
 
-        <div class="form-group col-md-6">
-            <label for="methodId">
-                select method
-            </label>
-            <select class="form-control select2" name="methodId" id="methodId">
-                <option value="" selected>select method</option>
-                {{#each methods}}
-                {{#ifEquals id ../account.methodId}}
-                <option value="{{id}}" selected>{{provider}} {{method}}</option>
-                {{else}}
-                <option value="{{id}}">{{provider}} {{method}}</option>
-                {{/ifEquals}}
-                {{/each}}
-            </select>
-            <small id="" class="form-text text-muted">
-                provide account method
-            </small>
-        </div>
+            <div class="form-group col-md-6">
+                <label for="disabled_children">
+                    disabled children
+                </label>
+                <input type="number" placeholder="disabled children count" value="{{booking.disabled_children}}"
+                    class="form-control" id="disabled_children" name="disabled_children" required>
+                <small id="" class="form-text text-muted">
+                    provide disabled children number
+                </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="special_request">
+                    Special request
+                </label>
+                <input type="text" placeholder="booking number" value="{{booking.special_request}}" class="form-control"
+                    id="special_request" name="special_request" required>
+                <small id="" class="form-text text-muted">
+                    provide booking acc_number
+                </small>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="countryId">
+                    from country
+                </label>
+                <select class="form-control select2" name="countryId" id="countryId">
+                    <option value="" selected>select country</option>
+                    {{#each countries}}
+                    {{#ifEquals id ../booking.countryId}}
+                    <option value="{{name}}" selected>{{name}} </option>
+                    {{else}}
+                    <option value="{{name}}">{{name}} </option>
+                    {{/ifEquals}}
+                    {{/each}}
+                </select>
+                <small id="" class="form-text text-muted">
+                    provide country
+                </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="countryId">
+                    from region / city
+                </label>
+                <input class="form-control select2" placeholder="region / city" name="regionId" id="regionId" value="" />
+                <small id="" class="form-text text-muted">
+                    provide city
+                </small>
+            </div>
             <div class="form-group col-md-6">
                 <label for="receipt_length">
                     receipt_length
                 </label>
-                <input type="text" placeholder="receipt_length" value="{{account.receipt_length}}" class="form-control"
+                <input type="text" placeholder="receipt_length" value="{{booking.receipt_length}}" class="form-control"
                     id="receipt_length" name="receipt_length" required>
                 <small id="" class="form-text text-muted">
-                    provide account receipt_length
+                    provide booking receipt_length
                 </small>
             </div>
         </div>
@@ -57,10 +97,10 @@
 
             <div class="form-group mt-2 col-md-6">
                 <button class="btn btn-block btn-info" type="submit">
-                    {{#if account}}
-                    update account
+                    {{#if booking}}
+                    update booking
                     {{else}}
-                    create account
+                    create booking
                     {{/if}}
                 </button>
             </div>
@@ -74,7 +114,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#methodId').select2({
+        $('#countryId').select2({
             dropdownParent: $('#large-modal')
         });
     });

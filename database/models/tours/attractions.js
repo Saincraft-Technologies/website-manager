@@ -1,8 +1,9 @@
 const { Model, DataTypes, sequelize } = require("../../mysql");
 const websites = require("../systems/websites");
 class attractions extends Model { };
+/** attraction available in the site! */
 attractions = sequelize.define('attractions', {
-    attraction_id: {
+    id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,

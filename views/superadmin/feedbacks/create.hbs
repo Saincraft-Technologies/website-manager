@@ -1,0 +1,104 @@
+<script src="{{{cdn 'public'}}}/js/select2.min.js"></script>
+<form method="POST" class="d-block ajaxForm" action="{{action}}">
+    <div class="form-row">
+        <div class="form-group row col-md-12">
+
+            <div class="form-group col-md-6">
+                <label for="email">
+                    Email
+                </label>
+                <input type="email" placeholder="email name" value="{{feedback.email}}" class="form-control" id="email"
+                    name="email" required>
+                <small id="" class="form-text text-muted">
+                    provide email email
+                </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="title">
+                    Title
+                </label>
+                <input type="text" placeholder="feedback title" value="{{feedback.title}}" class="form-control"
+                    id="title" name="title" required>
+                <small id="" class="form-text text-muted">
+                    provide feedback title
+                </small>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="username">
+                    username
+                </label>
+                <input type="text" placeholder="feedback number" value="{{feedback.username}}" class="form-control"
+                    id="username" name="username" required>
+                <small id="" class="form-text text-muted">
+                    provide feedback username
+                </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="websiteId">
+                    select website
+                </label>
+                <select class="form-control select2" name="websiteId" id="websiteId">
+                    <option value="" selected>select website</option>
+                    {{#each websites}}
+                    {{#ifEquals id ../feedback.websiteId}}
+                    <option value="{{id}}" selected>{{owner}} {{website}}</option>
+                    {{else}}
+                    <option value="{{id}}">{{owner}} {{website}}</option>
+                    {{/ifEquals}}
+                    {{/each}}
+                </select>
+                <small id="" class="form-text text-muted">
+                    provide feedback website
+                </small>
+            </div>
+
+
+            <div class="form-group col-md-6">
+                <label for="comment">
+                    comment
+                </label>
+                <textarea type="text" placeholder="feedback comment" value="{{feedback.comment}}" class="form-control"
+                    id="comment" name="comment" required></textarea>
+                <small id="" class="form-text text-muted">
+                    provide feedback comment
+                </small>
+                <label for="subscribe">
+                    subscribe
+                </label>
+                <input type="checkbox" placeholder="feedback subscribe" {{#if feedback}} value="{{feedback.subscribe}}"
+                    {{else}}value="1" {{/if}} class="ml-1" id="subscribe" name="subscribe" checked>
+            </div>
+        </div>
+        <div class="form-group row col-md-12">
+
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-info" type="submit">
+                    {{#if feedback}}
+                    update feedback
+                    {{else}}
+                    create feedback
+                    {{/if}}
+                </button>
+            </div>
+            <div class="form-group mt-2 col-md-6">
+                <button class="btn btn-block btn-secondary" type="reset" data-dismiss="modal">
+                    cancel
+                </button>
+            </div>
+        </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#websiteId').select2({
+            dropdownParent: $('#large-modal')
+        });
+    });
+
+    $(".ajaxForm").validate({}); // Jquery form validation initialization
+    $(".ajaxForm").submit(function (e) {
+        var form = $(this);
+        ajaxSubmit(e, form, 'POST', showAllManages);
+    });
+</script>
