@@ -17,7 +17,7 @@ const cors = require('cors');
 
 const models = require("./database/models/module_exporter");
 app.use(cors({
-    origin: ['https://www.saincrafttechnologies.com', 'https://captain.saincrafttechnologies.com', 'https://website-manager.builds.saincrafttechnologies.com', 'https://www.saincrafttechnologies.com', 'https://saincrafttechnologies-static-public-2023.fra1.digitaloceanspaces.com/storekeeperapp/public/fonts', , 'https://saincrafttechnologies-static-public-2023.fra1.digitaloceanspaces.com/storekeeperapp/public', process.env.D_PUBLIC],
+    origin: ['https://captain.builds.saincrafttechnologies.com', 'https://website-manager.builds.saincrafttechnologies.com', process.env.D_PUBLIC],
     methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
 }));
 app.use('/public', express.static(path.resolve(__dirname + '/public')));
@@ -39,7 +39,7 @@ passport.use(new LocalStrategy(
         passReqToCallback: true
     },
     authenticateUser));
-    
+
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
