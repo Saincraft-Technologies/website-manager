@@ -39,13 +39,23 @@ passport.use(new LocalStrategy(
         passReqToCallback: true
     },
     authenticateUser));
+if (process.env.NODE_ENV == 'development') {
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: `http://localhost:${process.env.PORT}/auth/google/callback`,
-    passReqToCallback: true
-}, authUser));
+    passport.use(new GoogleStrategy({
+        clientID: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        callbackURL: `http://localhost:${process.env.PORT}/auth/google/callback`,
+        passReqToCallback: true
+    }, authUser));
+} else {
+
+    passport.use(new GoogleStrategy({
+        clientID: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        callbackURL: `${process.env.SITE}/auth/google/callback`,
+        passReqToCallback: true
+    }, authUser));
+}
 
 passport.serializeUser(function (user, done) {
     return done(null, user);
