@@ -19,7 +19,7 @@ var register = function (Handlebars) {
             } else {
                 if (key == 'public') {
                     console.log('there is key', key);
-                    return process.env.PUBLIC + '/storekeeperapp/' + key;
+                    return process.env.PUBLIC;
                 } else {
                     console.log('there is no key', key);
                     return process.env.PUBLIC;
